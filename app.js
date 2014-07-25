@@ -10,6 +10,10 @@ var users = require('./routes/users');
 
 var app = express();
 
+// socket.io
+var server = require('http').Server(app);
+var io = require('socket.io')(server)
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
