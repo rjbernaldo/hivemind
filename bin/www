@@ -6,4 +6,5 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 server.listen(process.env.PORT || 3000);
 
-var emitter = require('../emitter')(io);
+// Initialize and run the main controller
+var mainController = require('../mainController')(io);
