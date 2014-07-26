@@ -1,6 +1,8 @@
 var Twitter = require('twitter')
 var mongojs = require('mongojs')
 var db = mongojs('tweets')
+var HOUR = 3600000
+var DAY = 86400000
 // var counter = 0;
 
 // log the tweets
@@ -78,6 +80,13 @@ var dbModel = (function(){
 // db Controller
 
 var dbController = (function(view, model){
+  // Remove hashtags where count = 1 every hour
+  setInterval(removeOldHashtagCounts, HOUR)
+
+  function removeOldHashtagCounts(){
+    db.collection('hashtagCount').remove({ value: 1 })
+  }
+
   return {
     view: view,
     model: model,
@@ -92,16 +101,17 @@ var dbController = (function(view, model){
           function reduce(key, values) { return Array.sum(values) }
           function finalize(key, value) { return { value: value, time: Date.now() } }
 
-db.collection('tweets').mapReduce(map, reduce, {
+        db.collection('tweets').mapReduce(map, reduce, {
                         query: { hashtag: tag.text },
-                        out: { merge: "hashtagCount", db: "tweets"},
-                        finalize: finalize
+                        out: { merge: "hashtagCount", db: "tweets"}
+                        // finalize: finalize
                         });
 
-          db.collection('tweets').remove( { timestamp: { "$lt": Date.now() - 86400000 } } )
+        // Remove tweets that came in more than an hour ago
+        db.collection('tweets').remove( { timestamp: { "$lt": Date.now() - DAY } } )
 
-          // DO NOT DELETE - find the top 5 most used hashtags in database
-          // db.hashtagCount.find( { $query: {}, $orderby: { value: -1 } } ).limit(5)
+        // DO NOT DELETE - find the top 5 most used hashtags in database
+        // db.hashtagCount.find( { $query: {}, $orderby: { value: -1 } } ).limit(5)
         });
       }
     }
