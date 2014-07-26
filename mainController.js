@@ -90,14 +90,15 @@ var dbController = (function(view, model){
 
           function map() { emit( this.hashtag, 1 ) }
           function reduce(key, values) { return Array.sum(values) }
+          function finalize(key, value) { return { value: value, time: Date.now() } }
 
-          db.collection('tweets').mapReduce(map, reduce, {
-                                              query: { hashtag: tag.text },
-                                              out: { merge: "hashtagCount", db: "tweets"},
-                                              verbose: true
-                                            });
+db.collection('tweets').mapReduce(map, reduce, {
+                        query: { hashtag: tag.text },
+                        out: { merge: "hashtagCount", db: "tweets"},
+                        finalize: finalize
+                        });
 
-          db.collection('tweets').remove({ "$lt": Date.now() - 86400000 })
+          db.collection('tweets').remove( { timestamp: { "$lt": Date.now() - 86400000 } } )
 
           // DO NOT DELETE - find the top 5 most used hashtags in database
           // db.hashtagCount.find( { $query: {}, $orderby: { value: -1 } } ).limit(5)
