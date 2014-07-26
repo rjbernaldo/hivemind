@@ -1,4 +1,4 @@
-var Twitter = require('twitter')
+var Twitter = require('twitter');
 
 var twitter = new Twitter({
     consumer_key: 'i1k8pKNzfJLMi8d9F6ISbs7SV',
@@ -19,13 +19,13 @@ twitter.stream('statuses/sample', function(stream) {
 
 // emit new message
 module.exports = function(io) {
-		setInterval(function() { // think of this as the twitter loop
-			// 1st task (VIEW)
-			var data = "TEST!";
-			emitTweet(io, data);
-			// 2nd task (MODEL)
-			saveToMongo(data);
-		},500);
+	setInterval(function() { // think of this as the twitter loop
+		// 1st task (VIEW)
+		var data = "TEST!";
+		emitTweet(io, data);
+		// 2nd task (MODEL)
+		saveToMongo(data);
+	},500);
 }
 
 // VIEW TASK
@@ -36,3 +36,4 @@ function emitTweet(io, data) {
 function saveToMongo(data) {
 	console.log(data);
 }
+
