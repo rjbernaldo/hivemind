@@ -1,6 +1,12 @@
 var Twitter = require('twitter')
 var mongojs = require('mongojs')
-var db = mongojs('tweets')
+var consumer_key = process.env.CONSUMER_KEY
+var consumer_secret = process.env.CONSUMER_SECRET
+var access_token_key = process.env.ACCESS_TOKEN_KEY
+var access_token_secret = process.env.ACCESS_TOKEN_SECRET
+var dbuser = process.env.DBUSER
+var dbpass = process.env.DBPASSWORD
+var db = mongojs('mongodb://'+dbuser+':'+dbpass+'@ds059908.mongolab.com:59908/livedata')
 var HOUR = 3600000
 var DAY = 86400000
 // var counter = 0;
@@ -21,10 +27,10 @@ function streamTweets(io) {
 // HELPERS
 function connectToTwitter(){
   var twitter = new Twitter({
-    consumer_key: 'i1k8pKNzfJLMi8d9F6ISbs7SV',
-    consumer_secret: 'zUHEYmnHhlSQwQoS8PczLYKOBnrVQErjJzJ0et6DgZMT4jw78W',
-    access_token_key: '2678182524-WsHJJGoyzQft2XpBcPNu4ByGmWYkl4F89ELYApX',
-    access_token_secret: '4U2HJbntXykhMhLQyAptI5RRXVoWrrltOCnsne3aKpgEt'
+    consumer_key: consumer_key,
+    consumer_secret: consumer_secret,
+    access_token_key: access_token_key,
+    access_token_secret: access_token_secret
   });
   return twitter
 }
@@ -103,10 +109,9 @@ var dbController = (function(view, model){
 
         db.collection('tweets').mapReduce(map, reduce, {
                         query: { hashtag: tag.text },
-                        out: { merge: "hashtagCount", db: "tweets"}
+                        out: { merge: "hashtagCount" }
                         // finalize: finalize
                         });
-
         // Remove tweets that came in more than an hour ago
         db.collection('tweets').remove( { timestamp: { "$lt": Date.now() - DAY } } )
 
