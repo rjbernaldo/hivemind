@@ -1,4 +1,6 @@
 var Twitter = require('twitter')
+var mongojs = require('mongojs')
+var db = mongojs('tweets')
 // var counter = 0;
 
 // log the tweets
@@ -81,15 +83,41 @@ var dbController = (function(view, model){
     model: model,
     parseRawTweet: function(io, tweet){
       var timestamp = tweet.created_at;
+
       if (tweet.entities && tweet.entities.hashtags.length > 0) {
         tweet.entities.hashtags.forEach(function(tag) {
-          console.log(tag.text, timestamp)
-          // { timestamp: created_at, hashtags: array of hashtags}
-        })
-      }
-      // TODO var totalTweetCount++;
+          db.collection('tweets').insert( {created_at: timestamp, hashtag: tag.text, timestamp: Date.parse(timestamp) } );
 
+          function map() { emit( this.hashtag, 1 ) }
+          function reduce(key, values) { return Array.sum(values) }
+
+          db.collection('tweets').mapReduce(map, reduce, {
+                                              query: { hashtag: tag.text },
+                                              out: { merge: "hashtagCount", db: "tweets"},
+                                              verbose: true
+                                            });
+
+          db.collection('tweets').remove({ "$lt": Date.now() - 86400000 })
+
+          // DO NOT DELETE - find the top 5 most used hashtags in database
+          // db.hashtagCount.find( { $query: {}, $orderby: { value: -1 } } ).limit(5)
+        });
+      }
     }
   }
 
 })(dbView, dbModel);
+/*
+function() {
+  db.collection('hashtagCount').findAndModify({
+    query: { _id: tag.text },
+    update: {
+      $addToSet: { value: 1 }
+    },
+    new: true,
+    upsert: true
+  });
+};
+
+*/
+
