@@ -61,6 +61,7 @@ function GlobeView(io) {
 GlobeView.prototype = {
   chartCoordinates: function(coordinates) {
     // chart coordinates on globe
+    this.io.sockets.emit('newGlobeTweet', coordinates);
   }
 }
 
@@ -100,10 +101,11 @@ DatabaseController.prototype = {
       out: {merge: "counts"}
     });
   },
+
   calculateTopFiveHashtags: function() {
     db.collection('counts').find({}).sort({value: -1}).limit(5).toArray(function(error, response){
       this.line_graph_view.redraw(response);
-    })
+    }.bind(this))
   }
 }
 
