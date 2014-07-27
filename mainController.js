@@ -16,14 +16,12 @@ var HOUR = 3600000
 var DAY = 86400000
 // var counter = 0;
 
-// log the tweets
-module.exports = initialize;
-
-function initialize() {
+module.exports = function() {
   var master_controller = new MasterController;
   master_controller.connect()
   master_controller.stream()
 }
+
 
 function MasterController() {
   this.API = null;
@@ -42,7 +40,7 @@ MasterController.prototype = {
   },
   stream: function() {
     this.API.stream('filter', {'locations': '-180,-90,180,90'}, function(stream) {
-      this.database_controller.removeDeprecated();
+      this.database_controller.removeDeprecatedCounts();
       stream.on('data', function(data) {
         this.globe_controller.extractCoordinates(data);
         this.database_controller.extractHashtags(data);
@@ -56,9 +54,9 @@ function GlobeController() {
 }
 
 GlobeController.prototype = {
-  extractCoordinates: function(data) {
-    if (data.coordinates) {
-      return data.coordinates.coordinates;
+  extractCoordinates: function(tweet) {
+    if (tweet.coordinates) {
+      return tweet.coordinates.coordinates;
     }
   }
 }
@@ -66,53 +64,75 @@ GlobeController.prototype = {
 function DatabaseController() {}
 
 DatabaseController.prototype = {
-  extractHashtags: function(data) {
-
-  },
-  removeDeprecated: function() {
+  removeDeprecatedCounts: function() {
     setInterval(function() {
-      db.collection('hashtagCount').remove({value: 1});
+      db.collection('counts').remove({value: 1});
     }, HOUR);
+  },
+  removeDeprecatedTweets: function() {
+    db.collection('hashtags').remove({timestamp: {"$lt": Date.now() - DAY}})
+  },
+  extractHashtags: function(tweet) {
+    if (tweet.entities && tweet.entities.hashtags.length > 0) {
+      this.storeHashtags(tweet);
+    }
+  },
+  storeHashtags: function(tweet) {
+    for (var i = 0; i < tweet.entities.hashtags.length; i++) {
+      db.collection('hashtags').insert({created_at: tweet.created_at,
+        hashtag: tweet.entities.hashtags[i].text, timestamp: Date.parse(tweet.created_at)};
+      this.updateCounts(tweet.entities.hashtags[i]);
+    }
+    this.removeDeprecatedTweets();
+  },
+  updateCounts: function(hashtag) {
+    function map() {emit(this.hashtag, 1)}
+    function reduce(key, values) {return Array.sum(values)}
+    db.collection('hashtags').mapReduce(map, reduce, {
+      query: {hashtag: hashtag.text},
+      out: {merge: "counts"}
+    });
   }
 }
 
 
-var dbController = (function(view, model){
-  // Remove hashtags where count = 1 every hour
-  setInterval(removeOldHashtagCounts, HOUR)
+// var dbController = (function(view, model){
+//   // Remove hashtags where count = 1 every hour
+//   setInterval(removeOldHashtagCounts, HOUR)
 
-  function removeOldHashtagCounts(){
-    db.collection('hashtagCount').remove({ value: 1 })
-  }
+//   function removeOldHashtagCounts(){
+//     db.collection('hashtagCount').remove({ value: 1 })
+//   }
 
-  return {
-    view: view,
-    model: model,
-    parseRawTweet: function(io, tweet){
-      var timestamp = tweet.created_at;
+//   return {
+//     view: view,
+//     model: model,
+//     parseRawTweet: function(io, tweet){
+//       var timestamp = tweet.created_at;
 
-      if (tweet.entities && tweet.entities.hashtags.length > 0) {
-        tweet.entities.hashtags.forEach(function(tag) {
-          db.collection('tweets').insert( {created_at: timestamp, hashtag: tag.text, timestamp: Date.parse(timestamp) } );
 
-          function map() { emit( this.hashtag, 1 ) }
-          function reduce(key, values) { return Array.sum(values) }
-          function finalize(key, value) { return { value: value, time: Date.now() } }
+//       if (tweet.entities && tweet.entities.hashtags.length > 0) {
+//         tweet.entities.hashtags.forEach(function(tag) {
+//           db.collection('tweets').insert( {created_at: timestamp, hashtag: tag.text, timestamp: Date.parse(timestamp) } );
 
-        db.collection('tweets').mapReduce(map, reduce, {
-                        query: { hashtag: tag.text },
-                        out: { merge: "hashtagCount" }
-                        // finalize: finalize
-                        });
-        // Remove tweets that came in more than an hour ago
-        db.collection('tweets').remove( { timestamp: { "$lt": Date.now() - DAY } } )
+//           function map() { emit( this.hashtag, 1 ) }
+//           function reduce(key, values) { return Array.sum(values) }
+//           function finalize(key, value) { return { value: value, time: Date.now() } }
 
-        // DO NOT DELETE - find the top 5 most used hashtags in database
-        // db.hashtagCount.find( { $query: {}, $orderby: { value: -1 } } ).limit(5)
-        });
-      }
-    }
-  }
+//         db.collection('tweets').mapReduce(map, reduce, {
+//                         query: { hashtag: tag.text },
+//                         out: { merge: "hashtagCount" }
+//                         // finalize: finalize
+//                         });
+//         // Remove tweets that came in more than 24 hours ago
+//         db.collection('tweets').remove( { timestamp: { "$lt": Date.now() - DAY } } )
 
-})(dbView, dbModel);
+//         // DO NOT DELETE - find the top 5 most used hashtags in database
+//         // db.hashtagCount.find( { $query: {}, $orderby: { value: -1 } } ).limit(5)
+//         });
+//       }
+//     }
+//   }
+
+// })(dbView, dbModel);
 
