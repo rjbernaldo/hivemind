@@ -1,27 +1,25 @@
 var Twitter = require('twitter'),
-    mongojs = require('mongojs')
+    mongojs = require('mongojs');
 var consumer_key = process.env.CONSUMER_KEY,
     consumer_secret = process.env.CONSUMER_SECRET,
     access_token_key = process.env.ACCESS_TOKEN_KEY,
-    access_token_secret = process.env.ACCESS_TOKEN_SECRET
+    access_token_secret = process.env.ACCESS_TOKEN_SECRET;
 var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
-    db = mongojs('mongodb://'+dbuser+':'+dbpass+'@ds059908.mongolab.com:59908/livedata')
+    db = mongojs('mydb');
 var MS_HOUR = 3600000,
     MS_DAY = 86400000;
-var io;
 
 module.exports = function(io) {
-  io = io;
-  var master_controller = new MasterController;
+  var master_controller = new MasterController(io);
   master_controller.connect()
   master_controller.stream()
 }
 
-function MasterController() {
+function MasterController(io) {
   this.API = null;
-  this.globe_controller = new GlobeController;
-  this.database_controller = new DatabaseController;
+  this.globe_controller = new GlobeController(io);
+  this.database_controller = new DatabaseController(io);
 }
 
 MasterController.prototype = {
@@ -44,8 +42,8 @@ MasterController.prototype = {
   }
 }
 
-function GlobeController() {
-  this.view = new GlobeView;
+function GlobeController(io) {
+  this.view = new GlobeView(io);
 }
 
 GlobeController.prototype = {
@@ -54,8 +52,11 @@ GlobeController.prototype = {
       this.view.chartCoordinates(tweet.coordinates.coordinates);
     }
   }
+}
 
-function GlobeView() {}
+function GlobeView(io) {
+  this.io = io;
+}
 
 GlobeView.prototype = {
   chartCoordinates: function(coordinates) {
@@ -63,8 +64,8 @@ GlobeView.prototype = {
   }
 }
 
-function DatabaseController() {
-  this.line_graph_view = new LineGraphView;
+function DatabaseController(io) {
+  this.line_graph_view = new LineGraphView(io);
 }
 
 DatabaseController.prototype = {
@@ -89,6 +90,7 @@ DatabaseController.prototype = {
       this.updateCounts(tweet.entities.hashtags[i]);
     }
     this.removeDeprecatedHashtags();
+    this.calculateTopFiveHashtags();
   },
   updateCounts: function(hashtag) {
     function map() {emit(this.hashtag, 1)}
@@ -97,13 +99,20 @@ DatabaseController.prototype = {
       query: {hashtag: hashtag.text},
       out: {merge: "counts"}
     });
+  },
+  calculateTopFiveHashtags: function() {
+    db.collection('counts').find({}).sort({value: -1}).limit(5).toArray(function(error, response){
+      this.line_graph_view.redraw(response);
+    })
   }
 }
 
-function LineGraphView() {}
+function LineGraphView(io) {
+  this.io = io;
+}
 
 LineGraphView.prototype = {
-  draw: function() {
-   // draw line graph
+  redraw: function(topHashtagCounts) {
+    this.io.sockets.emit('new count', topHashtagCounts);
   }
 }
