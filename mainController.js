@@ -1,6 +1,14 @@
 var Twitter = require('twitter')
 var mongojs = require('mongojs')
-var db = mongojs('tweets')
+var consumer_key = process.env.CONSUMER_KEY
+var consumer_secret = process.env.CONSUMER_SECRET
+var access_token_key = process.env.ACCESS_TOKEN_KEY
+var access_token_secret = process.env.ACCESS_TOKEN_SECRET
+var dbuser = process.env.DBUSER
+var dbpass = process.env.DBPASSWORD
+var db = mongojs('mongodb://'+dbuser+':'+dbpass+'@ds059908.mongolab.com:59908/livedata')
+var HOUR = 3600000
+var DAY = 86400000
 // var counter = 0;
 
 // log the tweets
@@ -19,10 +27,10 @@ function streamTweets(io) {
 // HELPERS
 function connectToTwitter(){
   var twitter = new Twitter({
-    consumer_key: 'JnAtg7w857u8TbY8rKKhGbxDn',
-    consumer_secret: '077wuTx92ziHLyDd4pcpeh56ZxUuABWYxH6tbk2d5PU9sKP36r',
-    access_token_key: '2683182212-k0oVE7ycyobbRQYVhslCoHtC1ci8WO4TNpGwwmw',
-    access_token_secret: 'D5sYiVJ8djyUvl6GygJBHMQbzGdoM2ObDyM3KemU2nG76'
+    consumer_key: consumer_key,
+    consumer_secret: consumer_secret,
+    access_token_key: access_token_key,
+    access_token_secret: access_token_secret
   });
   return twitter
 }
@@ -79,6 +87,13 @@ var dbModel = (function(){
 // db Controller
 
 var dbController = (function(view, model){
+  // Remove hashtags where count = 1 every hour
+  setInterval(removeOldHashtagCounts, HOUR)
+
+  function removeOldHashtagCounts(){
+    db.collection('hashtagCount').remove({ value: 1 })
+  }
+
   return {
     view: view,
     model: model,
@@ -93,16 +108,16 @@ var dbController = (function(view, model){
           function reduce(key, values) { return Array.sum(values) }
           function finalize(key, value) { return { value: value, time: Date.now() } }
 
-db.collection('tweets').mapReduce(map, reduce, {
+        db.collection('tweets').mapReduce(map, reduce, {
                         query: { hashtag: tag.text },
-                        out: { merge: "hashtagCount", db: "tweets"},
-                        finalize: finalize
+                        out: { merge: "hashtagCount" }
+                        // finalize: finalize
                         });
+        // Remove tweets that came in more than an hour ago
+        db.collection('tweets').remove( { timestamp: { "$lt": Date.now() - DAY } } )
 
-          db.collection('tweets').remove( { timestamp: { "$lt": Date.now() - 86400000 } } )
-
-          // DO NOT DELETE - find the top 5 most used hashtags in database
-          // db.hashtagCount.find( { $query: {}, $orderby: { value: -1 } } ).limit(5)
+        // DO NOT DELETE - find the top 5 most used hashtags in database
+        // db.hashtagCount.find( { $query: {}, $orderby: { value: -1 } } ).limit(5)
         });
       }
     }
