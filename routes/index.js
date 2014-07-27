@@ -12,4 +12,8 @@ router.get('/globe', function(req, res) {
   res.sendfile(globeIndex);
 });
 
+router.get('/amol', function(req, res) {
+  res.render('mychart');
+})
+
 module.exports = router;
