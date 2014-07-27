@@ -42,10 +42,10 @@ MasterController.prototype = {
   },
   stream: function() {
     this.API.stream('filter', {'locations': '-180,-90,180,90'}, function(stream) {
+      this.database_controller.removeDeprecated();
       stream.on('data', function(data) {
         this.globe_controller.extractCoordinates(data);
         this.database_controller.extractHashtags(data);
-        // dbController.parseRawTweet(null, data)
       }.bind(this));
     }.bind(this));
   }
