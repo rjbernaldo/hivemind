@@ -8,7 +8,8 @@ var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
     db = mongojs('mydb');
 var MS_HOUR = 3600000,
-    MS_DAY = 86400000;
+    MS_DAY = 86400000,
+    MS_SECOND = 100;
 
 module.exports = function(io) {
   var master_controller = new MasterController(io);
@@ -34,6 +35,7 @@ MasterController.prototype = {
   stream: function() {
     this.API.stream('filter', {'locations': '-180,-90,180,90'}, function(stream) {
       this.database_controller.removeDeprecatedCounts();
+      this.database_controller.calculateTopFiveHashtags();
       stream.on('data', function(data) {
         this.globe_controller.extractCoordinates(data);
         this.database_controller.extractHashtags(data);
@@ -90,7 +92,6 @@ DatabaseController.prototype = {
       this.updateCounts(tweet.entities.hashtags[i]);
     }
     this.removeDeprecatedHashtags();
-    this.calculateTopFiveHashtags();
   },
   updateCounts: function(hashtag) {
     function map() {emit(this.hashtag, 1)}
@@ -101,9 +102,12 @@ DatabaseController.prototype = {
     });
   },
   calculateTopFiveHashtags: function() {
-    db.collection('counts').find({}).sort({value: -1}).limit(5).toArray(function(error, response){
-      this.line_graph_view.redraw(response);
-    })
+    setInterval(function() {
+      var query = db.collection('counts').find({}).sort({value: -1}).limit(5)
+      query.toArray(function(error, topFiveHashtagCounts){
+        this.line_graph_view.draw(topFiveHashtagCounts);
+      }.bind(this));
+    }.bind(this), MS_SECOND);
   }
 }
 
@@ -112,7 +116,7 @@ function LineGraphView(io) {
 }
 
 LineGraphView.prototype = {
-  redraw: function(topHashtagCounts) {
+  draw: function(topHashtagCounts) {
     this.io.sockets.emit('new count', topHashtagCounts);
   }
 }
