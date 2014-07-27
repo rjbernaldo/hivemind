@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-=======
 var Twitter = require('twitter'),
     mongojs = require('mongojs')
 var consumer_key = process.env.CONSUMER_KEY,
@@ -19,7 +16,6 @@ module.exports = function(io) {
   var master_controller = new MasterController;
   master_controller.connect()
   master_controller.stream()
->>>>>>> e973ac3e376246463ff98f92434c8a8953c4bdd6
 }
 
 function MasterController() {
@@ -58,12 +54,6 @@ GlobeController.prototype = {
       this.view.chartCoordinates(tweet.coordinates.coordinates);
     }
   }
-<<<<<<< HEAD
-
-
-=======
-
->>>>>>> e973ac3e376246463ff98f92434c8a8953c4bdd6
 
 function GlobeView() {}
 
@@ -73,9 +63,6 @@ GlobeView.prototype = {
   }
 }
 
-<<<<<<< HEAD
-
-=======
 function DatabaseController() {
   this.line_graph_view = new LineGraphView;
 }
@@ -100,7 +87,6 @@ DatabaseController.prototype = {
                                         hashtag: tweet.entities.hashtags[i].text,
                                         timestamp: Date.parse(tweet.created_at)});
       this.updateCounts(tweet.entities.hashtags[i]);
->>>>>>> e973ac3e376246463ff98f92434c8a8953c4bdd6
     }
     this.removeDeprecatedHashtags();
   },
@@ -114,9 +100,6 @@ DatabaseController.prototype = {
   }
 }
 
-<<<<<<< HEAD
-
-=======
 function LineGraphView() {}
 
 LineGraphView.prototype = {
@@ -124,4 +107,3 @@ LineGraphView.prototype = {
    // draw line graph
   }
 }
->>>>>>> e973ac3e376246463ff98f92434c8a8953c4bdd6
