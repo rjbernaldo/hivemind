@@ -19,10 +19,10 @@ function streamTweets(io) {
 // HELPERS
 function connectToTwitter(){
   var twitter = new Twitter({
-    consumer_key: 'i1k8pKNzfJLMi8d9F6ISbs7SV',
-    consumer_secret: 'zUHEYmnHhlSQwQoS8PczLYKOBnrVQErjJzJ0et6DgZMT4jw78W',
-    access_token_key: '2678182524-WsHJJGoyzQft2XpBcPNu4ByGmWYkl4F89ELYApX',
-    access_token_secret: '4U2HJbntXykhMhLQyAptI5RRXVoWrrltOCnsne3aKpgEt'
+    consumer_key: 'JnAtg7w857u8TbY8rKKhGbxDn',
+    consumer_secret: '077wuTx92ziHLyDd4pcpeh56ZxUuABWYxH6tbk2d5PU9sKP36r',
+    access_token_key: '2683182212-k0oVE7ycyobbRQYVhslCoHtC1ci8WO4TNpGwwmw',
+    access_token_secret: 'D5sYiVJ8djyUvl6GygJBHMQbzGdoM2ObDyM3KemU2nG76'
   });
   return twitter
 }
@@ -40,8 +40,9 @@ function sendToDBController(io, data) {
 // Globe View
 var globeView = (function() {
   return {
-    renderOnGlobe: function(coords){
+    renderOnGlobe: function(io, coords){
       // counter++;
+      io.sockets.emit('newGlobeTweet', coords)
     }
   }
 })();
@@ -50,15 +51,15 @@ var globeView = (function() {
 var globeController = (function(view){
   this.view = view;
 
-  function sendToGlobeView(coords){
-    this.view.renderOnGlobe(coords);
+  function sendToGlobeView(io, coords){
+    this.view.renderOnGlobe(io, coords);
   }
 
   return {
     parseCoords: function(io, data){
       if (data.coordinates){
         // TODO send to view (emit)
-        sendToGlobeView(data.coordinates.coordinates)
+        sendToGlobeView(io, data.coordinates.coordinates)
       }
     }
   }
@@ -121,4 +122,3 @@ function() {
 };
 
 */
-
