@@ -6,7 +6,7 @@ var access_token_key = process.env.ACCESS_TOKEN_KEY
 var access_token_secret = process.env.ACCESS_TOKEN_SECRET
 var dbuser = process.env.DBUSER
 var dbpass = process.env.DBPASSWORD
-var db = mongojs('mongodb://'+dbuser+':'+dbpass+'@ds059908.mongolab.com:59908/livedata')
+var db = mongojs('tweets')
 var HOUR = 3600000
 var DAY = 86400000
 // var counter = 0;
@@ -74,7 +74,11 @@ var globeController = (function(view){
 
 // db view
 var dbView = (function(){
-
+  return {
+    renderOnCharts: function(io, updatedCount){
+      io.sockets.emit('new count', updatedCount)
+    }
+  }
 })();
 
 // db Model
@@ -96,6 +100,11 @@ var dbController = (function(view, model){
   return {
     view: view,
     model: model,
+
+    sendToInfoView: function(io, updatedCount){
+      view.renderOnCharts(io, updatedCount);
+    },
+
     parseRawTweet: function(io, tweet){
       var timestamp = tweet.created_at;
 
@@ -107,33 +116,28 @@ var dbController = (function(view, model){
           function reduce(key, values) { return Array.sum(values) }
           function finalize(key, value) { return { value: value, time: Date.now() } }
 
-        db.collection('tweets').mapReduce(map, reduce, {
+          db.collection('tweets').mapReduce(map, reduce, {
                         query: { hashtag: tag.text },
                         out: { merge: "hashtagCount" }
                         // finalize: finalize
                         });
-        // Remove tweets that came in more than an hour ago
-        db.collection('tweets').remove( { timestamp: { "$lt": Date.now() - DAY } } )
-
+          // Remove tweets that came in more than an hour ago
+          db.collection('tweets').remove( { timestamp: { "$lt": Date.now() - DAY } } )
         // DO NOT DELETE - find the top 5 most used hashtags in database
-        // db.hashtagCount.find( { $query: {}, $orderby: { value: -1 } } ).limit(5)
+
         });
+        // Send to infographics view
+        setInterval(function(){
+          // db.collection('hashtagCount').ensureIndex( { value: -1 })
+          var updatedCount = db.collection('hashtagCount').find( { $query: {}, $orderby: { value: -1 } } ).limit(5).toArray(function(err, results){
+            console.log(results)
+          })
+          // this.sendToInfoView(io, updatedCount)
+        }, 5000)
+        // console.log(updatedCount)
+
       }
     }
   }
 
 })(dbView, dbModel);
-/*
-function() {
-  db.collection('hashtagCount').findAndModify({
-    query: { _id: tag.text },
-    update: {
-      $addToSet: { value: 1 }
-    },
-    new: true,
-    upsert: true
-  });
-};
-
-*/
-
