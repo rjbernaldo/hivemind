@@ -31,12 +31,12 @@ if(!Detector.webgl){
 			collection.push(latitude);
 			collection.push(magnitude);
 
-			test();
+			renderPoints();
 			// globe.addData(collection, {format: 'magnitude', name: "tweets", animated: true});
 			// globe.createPoints();
 
 		});
-		function test() {
+		function renderPoints() {
 			globe.addData(collection, {format: 'magnitude', name: "tweets", animated: true});
 			collection = []
 			globe.createPoints();

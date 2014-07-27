@@ -19,7 +19,7 @@ function streamTweets(io) {
   connectToTwitter().stream('filter', { 'locations': '-180,-90,180,90' }, function(stream) {
     stream.on('data', function(data) {
       sendToGlobeController(io, data);
-      sendToDBController(io, data);
+      //sendToDBController(io, data);
     });
   });
 }
