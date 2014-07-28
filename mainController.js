@@ -6,14 +6,16 @@ var consumer_key = process.env.CONSUMER_KEY,
     access_token_secret = process.env.ACCESS_TOKEN_SECRET;
 var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
-    db = mongojs('tweets');
+    db = mongojs('mongodb://'+dbuser+':'+dbpass+'@ds059908.mongolab.com:59908/livedata');
 var MS_HOUR = 3600000,
     MS_DAY = 86400000,
-    MS_SECOND = 500;
+    MS_SECOND = 1000;
 
 module.exports = function(io) {
   var master_controller = new MasterController(io);
   master_controller.connect()
+  db.collection('tweets').createIndex({ 'hashtag': 1 })
+  db.collection('tweets').createIndex({ 'timestamp': 1 })
   master_controller.stream()
 }
 
@@ -85,7 +87,7 @@ function DatabaseController(io) {
 DatabaseController.prototype = {
   removeDeprecatedCounts: function() {
     setInterval(function() {
-      db.collection('counts').remove({value: 1});
+      db.collection('hashtagCount').remove({value: 1});
     }, MS_HOUR);
   },
   removeDeprecatedHashtags: function() {
@@ -98,7 +100,7 @@ DatabaseController.prototype = {
   },
   storeHashtags: function(tweet) {
     for (var i = 0; i < tweet.entities.hashtags.length; i++) {
-      db.collection('hashtags').insert({created_at: tweet.created_at,
+      db.collection('tweets').insert({created_at: tweet.created_at,
                                         hashtag: tweet.entities.hashtags[i].text,
                                         timestamp: Date.parse(tweet.created_at)});
       this.updateCounts(tweet.entities.hashtags[i]);
@@ -108,15 +110,15 @@ DatabaseController.prototype = {
   updateCounts: function(hashtag) {
     function map() {emit(this.hashtag, 1)}
     function reduce(key, values) {return Array.sum(values)}
-    db.collection('hashtags').mapReduce(map, reduce, {
+    db.collection('tweets').mapReduce(map, reduce, {
       query: {hashtag: hashtag.text},
-      out: {merge: "counts"}
+      out: {merge: "hashtagCount"}
     });
   },
 
   calculateTopFiveHashtags: function() {
     setInterval(function() {
-      var query = db.collection('counts').find({}).sort({value: -1}).limit(5)
+      var query = db.collection('hashtagCount').find({}).sort({value: -1}).limit(5)
       query.toArray(function(error, topFiveHashtagCounts){
         this.line_graph_view.draw(topFiveHashtagCounts);
       }.bind(this));
