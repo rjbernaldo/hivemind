@@ -9,11 +9,12 @@ var dbuser = process.env.DBUSER,
     db = mongojs('mongodb://'+dbuser+':'+dbpass+'@ds059908.mongolab.com:59908/livedata');
 var MS_HOUR = 3600000,
     MS_DAY = 86400000,
-    MS_SECOND = 500;
+    MS_SECOND = 1000;
 
 module.exports = function(io) {
   var master_controller = new MasterController(io);
   master_controller.connect()
+  db.collection('tweets').createIndex({ 'hashtag': 1 })
   master_controller.stream()
 }
 
@@ -88,9 +89,9 @@ DatabaseController.prototype = {
       db.collection('hashtagCount').remove({value: 1});
     }, MS_HOUR);
   },
-  // removeDeprecatedHashtags: function() {
-  //   db.collection('hashtags').remove({timestamp: {"$lt": Date.now() - MS_DAY}})
-  // },
+  removeDeprecatedHashtags: function() {
+    db.collection('hashtags').remove({timestamp: {"$lt": Date.now() - MS_DAY}})
+  },
   extractHashtags: function(tweet) {
     if (tweet.entities && tweet.entities.hashtags.length > 0) {
       this.storeHashtags(tweet);
@@ -103,7 +104,7 @@ DatabaseController.prototype = {
                                         timestamp: Date.parse(tweet.created_at)});
       this.updateCounts(tweet.entities.hashtags[i]);
     }
-    // this.removeDeprecatedHashtags();
+    this.removeDeprecatedHashtags();
   },
   updateCounts: function(hashtag) {
     function map() {emit(this.hashtag, 1)}
