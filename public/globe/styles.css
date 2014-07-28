@@ -59,4 +59,13 @@ a:hover {
   padding: 10px;
 }
 
+#github-link {
+  height:30px;
+}
+
+#github-link img {
+  height: 100%;
+  float:right;
+}
+
 
