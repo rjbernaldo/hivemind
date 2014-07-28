@@ -19,7 +19,7 @@ router.get('/', function(req, res) {
 
 
 
-router.get('/chart', function(req, res) {
+router.get('/hashtag', function(req, res) {
   res.render('mychart');
 })
 
