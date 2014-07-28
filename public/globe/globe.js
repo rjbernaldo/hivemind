@@ -1,5 +1,5 @@
-window.counter = 0;
-window.tweets = [];
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 /**
  * dat.globe Javascript WebGL Globe Toolkit
  * http://dataarts.github.com/dat.globe
@@ -174,7 +174,7 @@ DAT.Globe = function(container, opts) {
         for (i = 0; i < data.length; i += 3) {
           lat = data[i];
           lng = data[i + 1];
-          size = 25;
+          size = 15;
           // size = data[i + 2];
           // colorFnWrapper = function(data, i) { return colorFn(data[i+2]); }
           // color = colorFnWrapper(data,i);
@@ -187,6 +187,7 @@ DAT.Globe = function(container, opts) {
       // }
   };
 
+  var pointCollection = [];
   function createPoints() {
       if (this._baseGeometry.morphTargets.length < 8) {
         // console.log('t l',this._baseGeometry.morphTargets.length);
@@ -198,17 +199,41 @@ DAT.Globe = function(container, opts) {
         }
       }
 
-      if (this.points) {
-        scene.remove(this.points);
+      function fadeOut(elem) {
+        var counter = 50;
+        var maxCounter = counter;
+        function animate(elem, counter) {
+          if (counter >= 0) {
+            elem.material.opacity = counter/maxCounter;
+            counter --;
+            setTimeout(function() {
+              animate(elem, counter);
+            }, 0)
+          }
+        }
+        setTimeout(function() {
+          animate(elem, counter);
+        }, 0)
       }
 
-      this.points = new THREE.Mesh(this._baseGeometry, new THREE.MeshBasicMaterial({
-        color: 0x4099ff,
-        vertexColors: 0x4099ff,
-        morphTargets: false
-      }));
+      var x = 100;
+      if (pointCollection.length > x) {
+        scene.remove(pointCollection.shift());
+        // for (var i = 0; i < x; i++) {
+        //  scene.children[x - i].material.opacity = 1 - (i / x);
+        // }
+      }
 
+      var test = new THREE.MeshLambertMaterial({
+        emissive: 0x4099ff,
+        transparent: true
+      })
+
+      this.points = new THREE.Mesh(this._baseGeometry, test)
+
+      pointCollection.push(this.points);
       scene.add(this.points);
+      fadeOut(scene.children[scene.children.length - 1]);
   }
 
   function addPoint(lat, lng, size, color, subgeo) {
