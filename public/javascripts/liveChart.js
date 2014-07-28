@@ -1,10 +1,11 @@
 $(document).ready(function(){
   var socket = io.connect('http://localhost')
-  drawChart(socket);
+  drawChart(socket, 0);
   populateTagList(socket);
+  makeTagsClickable(socket);
 });
 
-function drawChart(socket){
+function drawChart(socket, pos){
   $('#chart').highcharts({
     chart: {
       type: 'line',
@@ -13,12 +14,10 @@ function drawChart(socket){
       events: {
         load: function() {
           socket.on('new count', function(data){
-            for (var i = 0; i < data.length; i++) {
-              var x = (new Date).getTime(),
-                  y = data[i].value;
-              this.series[i].name = data[i]._id;
-              this.series[i].addPoint([x, y], true, false);
-            }
+            var x = (new Date).getTime(),
+                y = data[pos].value;
+            this.series[0].name = data[pos]._id;
+            this.series[0].addPoint([x, y], true, false);
           }.bind(this));
         }
       }
@@ -77,3 +76,14 @@ function populateTagList(socket){
     }
   })
 }
+
+function makeTagsClickable(socket){
+  $('#tag2').on('click', function(){
+    // $("#chart").highcharts().series[0].visible=false;
+    // $("#chart").highcharts().series[2].visible=true;
+    $('#chart').remove();
+    $('#chart-container').append("<div id='chart'></div>")
+    drawChart(socket, 2);
+  })
+}
+
