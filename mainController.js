@@ -15,6 +15,7 @@ module.exports = function(io) {
   var master_controller = new MasterController(io);
   master_controller.connect()
   db.collection('tweets').createIndex({ 'hashtag': 1 })
+  db.collection('tweets').createIndex({ 'timestamp': 1 })
   master_controller.stream()
 }
 
