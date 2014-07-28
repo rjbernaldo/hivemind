@@ -49,22 +49,6 @@ function drawChart(socket, pos){
       data: [],
       visible: true,
       marker: {enabled: false}
-    }, {
-      data: [],
-      visible: false,
-      marker: {enabled: false}
-    }, {
-      data: [],
-      visible: false,
-      marker: {enabled: false}
-    }, {
-      data: [],
-      visible: false,
-      marker: {enabled: false}
-    }, {
-      data: [],
-      visible: false,
-      marker: {enabled: false}
     }]
   });
 };
@@ -78,12 +62,14 @@ function populateTagList(socket){
 }
 
 function makeTagsClickable(socket){
-  $('#tag2').on('click', function(){
-    // $("#chart").highcharts().series[0].visible=false;
-    // $("#chart").highcharts().series[2].visible=true;
-    $('#chart').remove();
-    $('#chart-container').append("<div id='chart'></div>")
-    drawChart(socket, 2);
-  })
+  for(var i = 0; i < 5; i++){
+    (function(i) {
+      $('#tag'+i).on('click', function(){
+        $('#chart').remove();
+        $('#tag-list').prepend("<div id='chart'></div>")
+        drawChart(socket, i);
+      })
+    })(i)
+  }
 }
 
