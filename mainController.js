@@ -6,10 +6,10 @@ var consumer_key = process.env.CONSUMER_KEY,
     access_token_secret = process.env.ACCESS_TOKEN_SECRET;
 var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
-    db = mongojs('mydb');
+    db = mongojs('tweets');
 var MS_HOUR = 3600000,
     MS_DAY = 86400000,
-    MS_SECOND = 100;
+    MS_SECOND = 500;
 
 module.exports = function(io) {
   var master_controller = new MasterController(io);

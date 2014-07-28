@@ -1,7 +1,8 @@
 $(document).ready(function(){
   var socket = io.connect('http://localhost')
   drawChart(socket);
-})
+  populateTagList(socket);
+});
 
 function drawChart(socket){
   $('#chart').highcharts({
@@ -69,3 +70,10 @@ function drawChart(socket){
   });
 };
 
+function populateTagList(socket){
+  socket.on('new count', function(data){
+    for (var i = 0; i < data.length; i++){
+      $($('#tag-list').children()[i]).text(data[i]._id)
+    }
+  })
+}
