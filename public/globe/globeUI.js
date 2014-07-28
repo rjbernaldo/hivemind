@@ -13,13 +13,15 @@ if(!Detector.webgl){
 	// 	new TWEEN.Tween(globe).to({time: 0},500).easing(TWEEN.Easing.Cubic.EaseOut).start();
 	// };
 
-	// TWEEN.start();
-
+	TWEEN.start();
 	window.onload = function() {
 		var collection = [];
 		document.body.style.backgroundImage = 'none';
 
-		var socket = io.connect('http://localhost')
+		var socket = io.connect('http://localhost');
+
+		// UI.TweetCount.init();
+  //   UI.HashtagCount.init();
 
 		socket.on('newGlobeTweet', function(data) {
 			var longtitude = data[1];
@@ -31,11 +33,17 @@ if(!Detector.webgl){
 			collection.push(latitude);
 			collection.push(magnitude);
 
+			UI.TweetCount.update();
+
 			renderPoints();
-			// globe.addData(collection, {format: 'magnitude', name: "tweets", animated: true});
-			// globe.createPoints();
 
 		});
+		var hashtagCounter = 0;
+
+		socket.on('newHashtag', function(data){
+			UI.HashtagCount.update(data);
+		});
+
 		function renderPoints() {
 			globe.addData(collection, {format: 'magnitude', name: "tweets", animated: true});
 			collection = []
@@ -43,24 +51,5 @@ if(!Detector.webgl){
 		}
 		globe.animate();
 	}
-	// var xhr;
-	// xhr = new XMLHttpRequest();
-	// xhr.open('GET', '/globe/population909500.json', true);
-	// xhr.onreadystatechange = function(e) {
-	// 	if (xhr.readyState === 4) {
-	// 		if (xhr.status === 200) {
-	// 			var data = JSON.parse(xhr.responseText);
-	// 			window.data = data;
-	// 			for (i=0;i<data.length;i++) {
-	// 				globe.addData(data[i][1], {format: 'magnitude', name: data[i][0], animated: true});
-	// 			}
-	// 			globe.createPoints();
-	// 			// settime(globe)();
-	// 			settime(globe);
-	// 			globe.animate();
-	// 			document.body.style.backgroundImage = 'none'; // remove loading
-	// 		}
-	// 	}
-	// };
-	// xhr.send(null);
+
 }
