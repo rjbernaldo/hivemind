@@ -178,7 +178,7 @@ DAT.Globe = function(container, opts) {
           // size = data[i + 2];
           // colorFnWrapper = function(data, i) { return colorFn(data[i+2]); }
           // color = colorFnWrapper(data,i);
-          color = new THREE.Color(0x4099ff)
+          color = new THREE.Color(0xffffff)
           // console.log(color)
           // color =
           // size = 0;
