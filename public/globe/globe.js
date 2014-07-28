@@ -223,7 +223,7 @@ DAT.Globe = function(container, opts) {
 
     point.scale.z = Math.max( size, 0.1 ); // avoid non-invertible matrix
     point.updateMatrix();
-    console.log(point.scale.z)
+    // console.log(point.scale.z)
 
     for (var i = 0; i < point.geometry.faces.length; i++) {
 
