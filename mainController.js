@@ -38,6 +38,7 @@ MasterController.prototype = {
       this.database_controller.calculateTopFiveHashtags();
       stream.on('data', function(data) {
         this.globe_controller.extractCoordinates(data);
+        this.globe_controller.extractHashtags(data);
         this.database_controller.extractHashtags(data);
       }.bind(this));
     }.bind(this));
@@ -51,7 +52,13 @@ function GlobeController(io) {
 GlobeController.prototype = {
   extractCoordinates: function(tweet) {
     if (tweet.coordinates) {
-      this.view.chartCoordinates(tweet.coordinates.coordinates);
+      //this.view.chartCoordinates(tweet.coordinates.coordinates);
+      this.view.chartCoordinates(tweet);
+    }
+  },
+  extractHashtags: function(tweet) {
+    if (tweet.entities) {
+      this.view.sendHashtagCount(tweet.entities.hashtags.length);
     }
   }
 }
@@ -63,7 +70,11 @@ function GlobeView(io) {
 GlobeView.prototype = {
   chartCoordinates: function(coordinates) {
     // chart coordinates on globe
-    this.io.sockets.emit('newGlobeTweet', coordinates);
+    this.io.sockets.emit('newGlobeTweet', coordinates.coordinates.coordinates);
+  },
+  sendHashtagCount: function(count) {
+    // send hashtag count to globe
+    this.io.sockets.emit('newHashtag', count);
   }
 }
 
