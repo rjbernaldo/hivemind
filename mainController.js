@@ -14,8 +14,9 @@ var MS_HOUR = 3600000,
 module.exports = function(io) {
   var master_controller = new MasterController(io);
   master_controller.connect()
-  db.collection('tweets').createIndex({ 'hashtag': 1 })
-  db.collection('tweets').createIndex({ 'timestamp': 1 })
+  db.collection('hashtags').createIndex({ 'hashtag': 1 })
+  db.collection('hashtags').createIndex({ 'timestamp': 1 })
+  db.collection('counts').createIndex({ 'value': -1} )
   master_controller.stream()
 }
 
@@ -87,7 +88,7 @@ function DatabaseController(io) {
 DatabaseController.prototype = {
   removeDeprecatedCounts: function() {
     setInterval(function() {
-      db.collection('hashtagCount').remove({value: 1});
+      db.collection('counts').remove({value: 1});
     }, MS_HOUR);
   },
   removeDeprecatedHashtags: function() {
@@ -100,7 +101,7 @@ DatabaseController.prototype = {
   },
   storeHashtags: function(tweet) {
     for (var i = 0; i < tweet.entities.hashtags.length; i++) {
-      db.collection('tweets').insert({created_at: tweet.created_at,
+      db.collection('hashtags').insert({created_at: tweet.created_at,
                                         hashtag: tweet.entities.hashtags[i].text,
                                         timestamp: Date.parse(tweet.created_at)});
       this.updateCounts(tweet.entities.hashtags[i]);
@@ -110,15 +111,15 @@ DatabaseController.prototype = {
   updateCounts: function(hashtag) {
     function map() {emit(this.hashtag, 1)}
     function reduce(key, values) {return Array.sum(values)}
-    db.collection('tweets').mapReduce(map, reduce, {
+    db.collection('hashtags').mapReduce(map, reduce, {
       query: {hashtag: hashtag.text},
-      out: {merge: "hashtagCount"}
+      out: {merge: "counts"}
     });
   },
 
   calculateTopFiveHashtags: function() {
     setInterval(function() {
-      var query = db.collection('hashtagCount').find({}).sort({value: -1}).limit(5)
+      var query = db.collection('counts').find({}).sort({value: -1}).limit(5)
       query.toArray(function(error, topFiveHashtagCounts){
         this.line_graph_view.draw(topFiveHashtagCounts);
       }.bind(this));
