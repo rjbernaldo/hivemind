@@ -1,60 +1,37 @@
-var dotenv = require('dotenv');
+var dotenv = require('dotenv'),
+    express = require('express'),
+    path = require('path'),
+    routes = require('./routes/index'),
+    newrelic = require('newrelic'),
+    app = express();
+
+// load environment
 dotenv.load();
-require('newrelic')
-var express = require('express');
-var path = require('path');
-var favicon = require('static-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
 
-
-var routes = require('./routes/index');
-
-var app = express();
-
-// view engine setup
+// set views path and engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(favicon());
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use(cookieParser());
+// load static files (css, js)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// load routes
 app.use('/', routes);
 
-/// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-/// error handlers
-
-// development error handler
-// will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+  // development error handler, shows stacktrace
+  app.use(function(error, request, response, next) {
+    response.status(error.status || 500);
+    response.render("Sorry, but something's broken!",
+      {message: error.message, error: error}
     });
+  });
+} else {
+  // production error handler, hides stacktrace
+  app.use(function(error, request, response, next) {
+    response.status(500);
+    response.render("Sorry, but something's broken!", {error: error});
+  })
 }
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
 
 module.exports = app;
