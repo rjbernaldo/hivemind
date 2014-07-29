@@ -42,14 +42,14 @@ UI.View = (function() {
     var link = document.createElement('a');
 
     containerDiv.className = 'tweetCountContainer'
-    containerDiv.style.position = 'absolute';
-    containerDiv.style.left = '20px';
-    containerDiv.style.top = '20px';
+    // containerDiv.style.position = 'absolute';
+    // containerDiv.style.left = '20px';
+    // containerDiv.style.top = '20px';
 
     countDiv.className = 'tweetCount';
-    countDiv.style.fontFamily = 'Georgia';
-    countDiv.style.fontSize = '40px'
-    countDiv.style.marginBottom = '15px'
+    // countDiv.style.fontFamily = 'Georgia';
+    // countDiv.style.fontSize = '40px'
+    // countDiv.style.marginBottom = '15px'
 
     textDiv.className = "tweetCountText"
     textDiv.innerHTML = 'TWEETS';
@@ -91,10 +91,30 @@ UI.View = (function() {
     document.body.appendChild(link);
   }
 
+  function animateDescription() {
+    $('#watching').toggle(
+      function(){
+        $('#what').addClass('flipOutX')
+        $('#what').css('display','none')
+        $('#explanation').css('display','block')
+        $('#explanation').removeClass('flipOutX')
+        $('#explanation').addClass('flipInX')        
+        },
+      function(){
+        $('#explanation').removeClass('flipInX')
+        $('#explanation').addClass('flipOutX')
+        $('#what').css('display','block')
+        $('#what').removeClass('flipOutX')
+        $('#what').addClass('flipInX')
+      }
+    )
+  }
+
   return {
     init: function() {
       initializeTweetCount();
       initializeHashtagCount();
+      animateDescription();
       // initializeCountryCount();
     },
     updateTweetCount: function(count) {

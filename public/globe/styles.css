@@ -12,6 +12,18 @@ body {
   height: 100%;
 }
 
+.tweetCount {
+  font-family: 'Georgia';
+  font-size: 40px;
+  margin-bottom: 15px
+}
+
+.tweetCountContainer {
+  position:absolute;
+  left: 20px;
+  top: 20px;
+}
+
 #info {
 
   font-size: 11px;
@@ -24,12 +36,43 @@ body {
 
 }
 
+#watching {
+  background-color: rgba(0,0,0,0.8);
+  position: absolute;
+  top: 45%;
+  left: 50px;
+  min-width: 175px;
+  font-size: 30px;
+  color:#aaa;
+  padding:5px;
+  width: 15%;
+}
+
+#what {
+  color:#aaa;
+}
+
+#what:hover {
+  color:white;
+}
+
+#explanation {
+  color:white;
+  display:none;
+  font-size:20px;
+}
+
+#explanation:hover {
+  color:white;
+}
+
 a {
   color: #aaa;
   text-decoration: none;
 }
 a:hover {
   text-decoration: underline;
+  color:white;
 }
 
 #ce span {
@@ -44,6 +87,10 @@ a:hover {
   bottom: 15px;
   left: 20px;
   background: url(/globe/ce.png);
+}
+
+#ce:hover {
+  color:white;
 }
 
 #basic-info {
@@ -67,5 +114,4 @@ a:hover {
   height: 100%;
   float:right;
 }
-
 
