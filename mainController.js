@@ -6,10 +6,10 @@ var consumer_key = process.env.CONSUMER_KEY,
     access_token_secret = process.env.ACCESS_TOKEN_SECRET;
 var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
-    db = mongojs('mongodb://'+dbuser+':'+dbpass+'@ds059908.mongolab.com:59908/livedata');
+    // db = mongojs('mongodb://'+dbuser+':'+dbpass+'@ds059908.mongolab.com:59908/livedata');
+    db = mongojs('tweets')
 var MS_HOUR = 3600000,
-    MS_DAY = 86400000,
-    MS_SECOND = 1000;
+    MS_DAY = 86400000
 
 module.exports = function(io) {
   var master_controller = new MasterController(io);
@@ -37,11 +37,11 @@ MasterController.prototype = {
   stream: function() {
     this.API.stream('filter', {'locations': '-180,-90,180,90'}, function(stream) {
       this.database_controller.removeDeprecatedCounts();
-      this.database_controller.calculateTopFiveHashtags();
       stream.on('data', function(data) {
         this.globe_controller.extractCoordinates(data);
         this.globe_controller.extractHashtags(data);
         this.database_controller.extractHashtags(data);
+        this.database_controller.calculateTopFiveHashtags();
       }.bind(this));
     }.bind(this));
   }
@@ -117,12 +117,10 @@ DatabaseController.prototype = {
   },
 
   calculateTopFiveHashtags: function() {
-    setInterval(function() {
-      var query = db.collection('hashtagCount').find({}).sort({value: -1}).limit(5)
-      query.toArray(function(error, topFiveHashtagCounts){
-        this.line_graph_view.draw(topFiveHashtagCounts);
-      }.bind(this));
-    }.bind(this), MS_SECOND);
+    var query = db.collection('hashtagCount').find({}).sort({value: -1}).limit(5)
+    query.toArray(function(error, topFiveHashtagCounts){
+      this.line_graph_view.draw(topFiveHashtagCounts);
+    }.bind(this));
 
   }
 }

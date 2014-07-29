@@ -17,7 +17,9 @@ router.get('/', function(req, res) {
   res.sendfile(globeIndex);
 });
 
-
+router.get('/canvas', function(req, res){
+  res.render('canvas');
+})
 
 router.get('/hashtag', function(req, res) {
   res.render('mychart');
