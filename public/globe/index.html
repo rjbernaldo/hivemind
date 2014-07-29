@@ -1,22 +1,49 @@
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
-    <title>WebGL Globe</title>
+    <title>Twitterlytics</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/globe/styles.css">
+    <link rel="stylesheet" href="/globe/animate.css">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
   </head>
   <body>
 
   <div id="container"></div>
 
-  <div id="info">
+  <a href="/hashtag">
+    <div class="hashtagCountContainer animated zoomInRight">
+      <div class="hashtagCount"></div>
+      <div class="hashtagCountText">
+      HASHTAGS
+      </div>
+    </div>
+  </a>
+
+  <a href="#">
+    <div class="tweetCountContainer animated zoomInLeft">
+      <div class="tweetCount"></div>
+      <div class="tweetCountText">
+      TWEETS
+      </div>
+    </div>
+  </a>
+
+
+  <div id="watching" class="animated zoomInLeft">
+    <div id="what" class="animated">WHAT IS THIS?</div>
+    <div id="explanation" class="animated">You are watching a live stream of 1% of all tweets, plotted by location, in real time.</div>
+  </div>
+
+  <div id="info" class="animated zoomInRight">
     <div id="github-link">
       <a href="https://github.com/rjbernaldo/live-analytics"><img src="http://www.iconsdb.com/icons/download/silver/github-10-512.png"></a>
     </div>
     Created by <a href="http://github.com/rjbernaldo">Rj</a>, <a href="http://github.com/shcallaway">Sherwood</a>, <a href="http://github.com/amolborcar">Amol</a>, & <a href="http://github.com/mameneses">Matias</a> &bull; Realtime data acquired from the <a href="http://dev.twitter.com/">Twitter Streaming API</a>
   </div>
 
-  <a id="ce" href="http://www.chromeexperiments.com/globe">
+  <a id="ce" class="animated zoomInLeft" href="http://www.chromeexperiments.com/globe">
     <span>This is a Chrome Experiment</span>
   </a>
 
