@@ -15,6 +15,7 @@ if(!Detector.webgl){
 
 	// TWEEN.start();
 	window.onload = function() {
+		
 		document.body.style.backgroundImage = 'none';
 
 		var hashtagCounter = 0;
