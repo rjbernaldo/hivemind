@@ -3,8 +3,8 @@ var express = require('express'),
     path = require('path');
 
 router.get('/', function(request, response) {
-  var globeIndex = path.join(__dirname, '../', 'public/globe/index.html');
-  response.sendfile(globeIndex);
+  // var globeIndex = path.join(__dirname, 'index.html');
+  response.sendfile('index.html');
 });
 
 router.get('/hashtag', function(request, response) {
