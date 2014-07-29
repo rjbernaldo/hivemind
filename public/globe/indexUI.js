@@ -35,6 +35,7 @@ UI.View = (function() {
   var hashtagCountDom = document.getElementsByClassName('hashtagCount');
   // var countryCountDom = document.getElementsByClassName('something');
 
+
   function initializeTweetCount() {
     var containerDiv = document.createElement('div');
     var countDiv = document.createElement('div');
