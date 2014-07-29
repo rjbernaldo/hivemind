@@ -7,8 +7,17 @@ router.get('/', function(request, response) {
   response.sendfile(globeIndex);
 });
 
+<<<<<<< HEAD
+router.get('/canvas', function(req, res){
+  res.render('canvas');
+})
+
+router.get('/hashtag', function(req, res) {
+  res.render('mychart');
+=======
 router.get('/hashtag', function(request, response) {
   response.render('mychart');
+>>>>>>> master
 })
 
 module.exports = router;
