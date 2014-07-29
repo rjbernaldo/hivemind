@@ -24,6 +24,13 @@ body {
   top: 20px;
 }
 
+.tweetCountDescription {
+  position: absolute;
+  top: 80px;
+  left:20px;
+  width:100px;
+}
+
 .hashtagCountContainer {
   position: absolute;
   right: 20px;

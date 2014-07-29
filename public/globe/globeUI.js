@@ -34,6 +34,8 @@ if(!Detector.webgl){
 			UI.HashtagCount.update(data);
 		});
 
+		UI.SessionTimer.update()
+
 		globe.animate();
 	}
 }
