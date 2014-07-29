@@ -138,7 +138,8 @@ DAT.Globe = function(container, opts) {
     mesh.scale.set( 1.1, 1.1, 1.1 );
     scene.add(mesh);
 
-    geometry = new THREE.CubeGeometry(0.75, 0.75, 1);
+    // geometry = new THREE.CubeGeometry(0.75, 0.75, 1);
+    geometry = new THREE.SphereGeometry(3,8,6);
     geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-0.5));
 
     point = new THREE.Mesh(geometry);
@@ -168,72 +169,52 @@ DAT.Globe = function(container, opts) {
   }
 
   addData = function(data, opts) {
-    var lat, lng, size, color, i, step, colorFnWrapper;
-      // if (this._baseGeometry === undefined) {
-        this._baseGeometry = new THREE.Geometry();
-        for (i = 0; i < data.length; i += 3) {
-          lat = data[i];
-          lng = data[i + 1];
-          size = 15;
-          // size = data[i + 2];
-          // colorFnWrapper = function(data, i) { return colorFn(data[i+2]); }
-          // color = colorFnWrapper(data,i);
-          color = new THREE.Color(0x4099ff)
-          // console.log(color)
-          // color =
-          // size = 0;
-          addPoint(lat, lng, size, color, this._baseGeometry);
-        }
-      // }
+    this._baseGeometry = new THREE.Geometry();
+    addPoint(data[0], data[1], 1, new THREE.Color(0x4099ff), this._baseGeometry);
   };
 
   var pointCollection = [];
+
   function createPoints() {
-      if (this._baseGeometry.morphTargets.length < 8) {
-        // console.log('t l',this._baseGeometry.morphTargets.length);
-        var padding = 8-this._baseGeometry.morphTargets.length;
-        // console.log('padding', padding);
-        for(var i=0; i<=padding; i++) {
-          // console.log('padding',i);
-          this._baseGeometry.morphTargets.push({'name': 'morphPadding'+i, vertices: this._baseGeometry.vertices});
+    if (this._baseGeometry.morphTargets.length < 8) {
+      var padding = 8-this._baseGeometry.morphTargets.length;
+      for(var i=0; i<=padding; i++) {
+        this._baseGeometry.morphTargets.push({'name': 'morphPadding'+i, vertices: this._baseGeometry.vertices});
+      }
+    }
+
+    function fadeOut(elem) {
+      var counter = 50;
+      var maxCounter = counter;
+      function animate(elem, counter) {
+        if (counter >= 0) {
+          elem.material.opacity = counter/maxCounter;
+          counter --;
+          setTimeout(function() {
+            animate(elem, counter);
+          }, 0)
         }
       }
+      setTimeout(function() {
+        animate(elem, counter);
+      }, 0)
+    }
 
-      function fadeOut(elem) {
-        var counter = 50;
-        var maxCounter = counter;
-        function animate(elem, counter) {
-          if (counter >= 0) {
-            elem.material.opacity = counter/maxCounter;
-            counter --;
-            setTimeout(function() {
-              animate(elem, counter);
-            }, 0)
-          }
-        }
-        setTimeout(function() {
-          animate(elem, counter);
-        }, 0)
-      }
+    var x = 100;
+    if (pointCollection.length > x) {
+      scene.remove(pointCollection.shift());
+    }
 
-      var x = 100;
-      if (pointCollection.length > x) {
-        scene.remove(pointCollection.shift());
-        // for (var i = 0; i < x; i++) {
-        //  scene.children[x - i].material.opacity = 1 - (i / x);
-        // }
-      }
+    var test = new THREE.MeshLambertMaterial({
+      emissive: 0x4099ff,
+      transparent: true
+    })
 
-      var test = new THREE.MeshLambertMaterial({
-        emissive: 0x4099ff,
-        transparent: true
-      })
+    this.points = new THREE.Mesh(this._baseGeometry, test)
 
-      this.points = new THREE.Mesh(this._baseGeometry, test)
-
-      pointCollection.push(this.points);
-      scene.add(this.points);
-      fadeOut(scene.children[scene.children.length - 1]);
+    pointCollection.push(this.points);
+    scene.add(this.points);
+    fadeOut(scene.children[scene.children.length - 1]);
   }
 
   function addPoint(lat, lng, size, color, subgeo) {
@@ -247,8 +228,8 @@ DAT.Globe = function(container, opts) {
     point.lookAt(mesh.position);
 
     point.scale.z = Math.max( size, 0.1 ); // avoid non-invertible matrix
+
     point.updateMatrix();
-    // console.log(point.scale.z)
 
     for (var i = 0; i < point.geometry.faces.length; i++) {
 
@@ -341,11 +322,8 @@ DAT.Globe = function(container, opts) {
   function render() {
     zoom(curZoomSpeed);
 
-    rotation.x += 0.003;
-    rotation.y = 0.283;
-    //rotation.x += (target.x - rotation.x) * 0.1;
-    //rotation.y += (target.y - rotation.y) * 0.1;
-    // console.log(rotation.y)
+    rotation.x += (target.x - rotation.x) * 0.1;
+    rotation.y += (target.y - rotation.y) * 0.1;
     distance += (distanceTarget - distance) * 0.3;
 
     camera.position.x = distance * Math.sin(rotation.x) * Math.cos(rotation.y);
