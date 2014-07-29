@@ -18,7 +18,7 @@ if(!Detector.webgl){
 		document.body.style.backgroundImage = 'none';
 
 		var hashtagCounter = 0;
-		var socket = io.connect('http://localhost');
+		var socket = io.connect('/');
 
 		socket.on('newGlobeTweet', function(data) {
 			var longtitude = data[1];

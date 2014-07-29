@@ -1,10 +1,11 @@
 $(document).ready(function(){
-  var socket = io.connect('http://localhost')
-  drawChart(socket);
+  var socket = io.connect('/')
+  drawChart(socket, 0);
   populateTagList(socket);
+  makeTagsClickable(socket);
 });
 
-function drawChart(socket){
+function drawChart(socket, pos){
   $('#chart').highcharts({
     chart: {
       type: 'line',
@@ -13,12 +14,10 @@ function drawChart(socket){
       events: {
         load: function() {
           socket.on('new count', function(data){
-            for (var i = 0; i < data.length; i++) {
-              var x = (new Date).getTime(),
-                  y = data[i].value;
-              this.series[i].name = data[i]._id;
-              this.series[i].addPoint([x, y], true, false);
-            }
+            var x = (new Date).getTime(),
+                y = data[pos].value;
+            this.series[0].name = data[pos]._id;
+            this.series[0].addPoint([x, y], true, false);
           }.bind(this));
         }
       }
@@ -50,22 +49,6 @@ function drawChart(socket){
       data: [],
       visible: true,
       marker: {enabled: false}
-    }, {
-      data: [],
-      visible: false,
-      marker: {enabled: false}
-    }, {
-      data: [],
-      visible: false,
-      marker: {enabled: false}
-    }, {
-      data: [],
-      visible: false,
-      marker: {enabled: false}
-    }, {
-      data: [],
-      visible: false,
-      marker: {enabled: false}
     }]
   });
 };
@@ -77,3 +60,16 @@ function populateTagList(socket){
     }
   })
 }
+
+function makeTagsClickable(socket){
+  for(var i = 0; i < 5; i++){
+    (function(i) {
+      $('#tag'+i).on('click', function(){
+        $('#chart').remove();
+        $('#tag-list').prepend("<div id='chart'></div>")
+        drawChart(socket, i);
+      })
+    })(i)
+  }
+}
+
