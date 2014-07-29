@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  var socket = io.connect('http://localhost')
+  var socket = io.connect('/')
   drawChart(socket, 0);
   populateTagList(socket);
   makeTagsClickable(socket);

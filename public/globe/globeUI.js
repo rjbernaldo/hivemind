@@ -18,7 +18,7 @@ if(!Detector.webgl){
 		var collection = [];
 		document.body.style.backgroundImage = 'none';
 
-		var socket = io.connect('http://localhost');
+		var socket = io.connect('/');
 
 		// UI.TweetCount.init();
   //   UI.HashtagCount.init();

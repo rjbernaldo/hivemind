@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var debug = require('debug')('live-analytics');
+// var debug = require('debug')('live-analytics');
 var app = require('../app');
 
 var server = require('http').Server(app);
