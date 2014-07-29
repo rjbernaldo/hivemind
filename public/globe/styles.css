@@ -25,7 +25,6 @@ body {
 }
 
 #info {
-
   font-size: 11px;
   position: absolute;
   bottom: 5px;
@@ -39,17 +38,18 @@ body {
 #watching {
   background-color: rgba(0,0,0,0.8);
   position: absolute;
-  top: 45%;
+  top: 40%;
   left: 50px;
-  min-width: 175px;
-  font-size: 30px;
+  min-width: 125px;
   color:#aaa;
   padding:5px;
   width: 15%;
+  line-height: 220%;
 }
 
 #what {
-  color:#aaa;
+  color:#aaa;  
+  font-size: 18px;
 }
 
 #what:hover {
@@ -59,7 +59,7 @@ body {
 #explanation {
   color:white;
   display:none;
-  font-size:20px;
+  font-size:25px;
 }
 
 #explanation:hover {
