@@ -4,7 +4,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background: #000000 url(/globe/loading.gif) center center no-repeat;
+  background: #000000 url(/images/globe-loading.gif) center center no-repeat;
   color: #ffffff;
   font-family: sans-serif;
   font-size: 13px;
@@ -65,7 +65,7 @@ body {
 }
 
 #what {
-  color:#aaa;  
+  color:#aaa;
   font-size: 18px;
 }
 
@@ -99,7 +99,7 @@ a:hover {
   position: absolute;
   bottom: 15px;
   left: 20px;
-  background: url(/globe/ce.png);
+  background: url(/images/globe-ce.png);
 }
 
 #ce:hover {
@@ -127,4 +127,3 @@ a:hover {
   height: 100%;
   float:right;
 }
-
