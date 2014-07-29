@@ -1,4 +1,5 @@
-window.onload = function() {
+function web() {
+
 	var socket = io.connect('http://localhost')
 
 	socket.on('new message', function(data) {
@@ -7,3 +8,4 @@ window.onload = function() {
 		document.body.appendChild(div);
 	});
 }
+

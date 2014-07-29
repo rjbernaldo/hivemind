@@ -6,7 +6,8 @@ var consumer_key = process.env.CONSUMER_KEY,
     access_token_secret = process.env.ACCESS_TOKEN_SECRET;
 var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
-    db = mongojs('mongodb://'+dbuser+':'+dbpass+'@ds059908.mongolab.com:59908/livedata');
+    db = mongojs('tweets')
+    // db = mongojs('mongodb://'+dbuser+':'+dbpass+'@ds059908.mongolab.com:59908/livedata');
 var MS_HOUR = 3600000,
     MS_DAY = 86400000,
     MS_SECOND = 1000;
@@ -16,6 +17,7 @@ module.exports = function(io) {
   master_controller.connect()
   db.collection('tweets').createIndex({ 'hashtag': 1 })
   db.collection('tweets').createIndex({ 'timestamp': 1 })
+  db.collection('hashtagCount').createIndex({ 'value': -1 })
   master_controller.stream()
 }
 
@@ -37,11 +39,11 @@ MasterController.prototype = {
   stream: function() {
     this.API.stream('filter', {'locations': '-180,-90,180,90'}, function(stream) {
       this.database_controller.removeDeprecatedCounts();
-      this.database_controller.calculateTopFiveHashtags();
       stream.on('data', function(data) {
         this.globe_controller.extractCoordinates(data);
         this.globe_controller.extractHashtags(data);
         this.database_controller.extractHashtags(data);
+        this.database_controller.calculateTopFiveHashtags();
       }.bind(this));
     }.bind(this));
   }
@@ -81,6 +83,7 @@ GlobeView.prototype = {
 }
 
 function DatabaseController(io) {
+  this.io = io
   this.line_graph_view = new LineGraphView(io);
 }
 
@@ -116,11 +119,12 @@ DatabaseController.prototype = {
     });
   },
 
-  calculateTopFiveHashtags: function() {
+  calculateTopFiveHashtags: function(io) {
     setInterval(function() {
       var query = db.collection('hashtagCount').find({}).sort({value: -1}).limit(5)
       query.toArray(function(error, topFiveHashtagCounts){
-        this.line_graph_view.draw(topFiveHashtagCounts);
+        // this.line_graph_view.draw(topFiveHashtagCounts);
+        this.io.sockets.emit('new count', topFiveHashtagCounts)
       }.bind(this));
     }.bind(this), MS_SECOND);
 

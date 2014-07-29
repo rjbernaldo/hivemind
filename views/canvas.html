@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <script type="text/javascript">
+  window.onload = function () {
+    web();
+    var socket = io.connect('http://localhost');
+    dps = []; // dataPoints
+    // socket.on('new count', updateTopTags)
+
+    var chart = new CanvasJS.Chart("chartContainer",{
+      title :{
+        text: "Top Hashtags"
+      },
+
+      axisY:{
+        title: "Frequency",
+        interval: 100
+      },
+
+      data: [{
+        type: "line",
+        dataPoints: dps
+      }]
+    });
+
+    xVal = 0;
+    var updateInterval = 20;
+    dataLength = 50; // number of dataPoints visible at any point
+
+    var updateChart = function (count) {
+      count = count || 1;
+      // count is number of times loop runs to generate random dataPoints.
+
+      socket.on('new count', updateTopTags)
+      chart.render()
+    };
+
+    // generates first set of dataPoints
+    updateChart(dataLength);
+
+    // update chart after specified time.
+    setInterval(function(){updateChart()}, updateInterval);
+
+  }
+
+  updateTopTags = function(data){
+    // var xVal = 0;
+    dps.push({
+      x: xVal,
+      y: data[0].value
+    });
+    xVal++;
+    if (dps.length > dataLength)
+      {
+        dps.shift();
+      }
+    // console.log(data[0].value)
+    // chart.render()
+  }
+
+
+  </script>
+  <script type="text/javascript" src="/javascripts/canvasjs.min.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="/javascripts/web.js"></script>
+</head>
+<body>
+  <div id="chartContainer" style="height: 300px; width:100%;">
+  hello
+  </div>
+</body>
+</html>
