@@ -24,7 +24,7 @@ if (app.get('env') === 'development') {
     response.status(error.status || 500);
     response.render("Sorry, but something's broken!",
       {message: error.message, error: error}
-    });
+    );
   });
 } else {
   // production error handler, hides stacktrace

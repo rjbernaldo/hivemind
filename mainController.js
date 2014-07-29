@@ -1,19 +1,22 @@
 var Twitter = require('twitter'),
-    consumer_key = process.env.CONSUMER_KEY,
-    consumer_secret = process.env.CONSUMER_SECRET,
-    access_token_key = process.env.ACCESS_TOKEN_KEY,
-    access_token_secret = process.env.ACCESS_TOKEN_SECRET;
+    consumer_key = "i1k8pKNzfJLMi8d9F6ISbs7SV",
+    consumer_secret = "zUHEYmnHhlSQwQoS8PczLYKOBnrVQErjJzJ0et6DgZMT4jw78W",
+    access_token_key = "2678182524-WsHJJGoyzQft2XpBcPNu4ByGmWYkl4F89ELYApX",
+    access_token_secret = "4U2HJbntXykhMhLQyAptI5RRXVoWrrltOCnsne3aKpgEt";
+    // consumer_key = process.env.CONSUMER_KEY,
+    // consumer_secret = process.env.CONSUMER_SECRET,
+    // access_token_key = process.env.ACCESS_TOKEN_KEY,
+    // access_token_secret = process.env.ACCESS_TOKEN_SECRET;
 var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
     mongojs = require('mongojs'),
-    db = mongojs('mongodb://' + dbuser + ':' + dbpass + '@ds059908.mongolab.com:59908/livedata');
+    db = mongojs("local");
+    // db = mongojs('mongodb://' + dbuser + ':' + dbpass + '@ds059908.mongolab.com:59908/livedata');
 var MS_HOUR = 3600000,
     MS_DAY = 86400000,
     MS_SECOND = 1000;
 
-module.exports = initialize(io);
-
-function initialize(io) {
+module.exports = function(io) {
   var master_controller = new MasterController(io);
   master_controller.connect();
   db.collection('hashtags').createIndex({ 'hashtag': 1 });
