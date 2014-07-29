@@ -266,6 +266,7 @@ DAT.Globe = function(container, opts) {
 
     target.y = target.y > PI_HALF ? PI_HALF : target.y;
     target.y = target.y < - PI_HALF ? - PI_HALF : target.y;
+   
   }
 
   function onMouseUp(event) {
