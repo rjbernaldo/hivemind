@@ -1,10 +1,10 @@
-#!/usr/bin/env node
-// var debug = require('debug')('live-analytics');
+// require app
 var app = require('../app');
 
+// require and start server
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
 server.listen(process.env.PORT || 3000);
 
-// Initialize and run the main controller
-var mainController = require('../mainController')(io);
+// require io and initialize master controller
+var io = require('socket.io')(server);
+var master_controller = require('../server/controllers/master_controller.js')(io);

@@ -14,6 +14,15 @@ UI.TweetCount = (function() {
   }
 })();
 
+UI.SessionTimer = (function(){
+
+  return {
+    update:function(count) {
+      UI.View.updateTimeCount(count)
+    }
+  }
+})();
+
 UI.HashtagCount = (function() {
   var hashtagCounter = 0;
 
@@ -27,15 +36,6 @@ UI.HashtagCount = (function() {
       UI.View.updateHashtagCount(currentCount);
     }
 
-  }
-})();
-
-UI.SessionTimer = (function(){
-
-  return {
-    update:function(seconds) {
-      UI.View.updateTimeCount(seconds)
-    }
   }
 })();
 
@@ -103,8 +103,8 @@ UI.View = (function() {
   return {
     init: function() {
       animateDescription();
-      hoverTweetCount();
       hoverHashtagCount();
+      hoverTweetCount();
       // initializeCountryCount();
     },
     updateTweetCount: function(count) {

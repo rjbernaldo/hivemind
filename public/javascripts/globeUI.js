@@ -34,7 +34,11 @@ if(!Detector.webgl){
 			UI.HashtagCount.update(data);
 		});
 
-		UI.SessionTimer.update()
+		var timeCounter = 0
+		setInterval(function () {
+		    ++timeCounter;
+			UI.SessionTimer.update(timeCounter)
+		    }, 1000);
 
 		globe.animate();
 	}
