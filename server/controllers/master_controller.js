@@ -4,7 +4,8 @@ var Twitter = require('twitter'),
     access_token_key = process.env.ACCESS_TOKEN_KEY,
     access_token_secret = process.env.ACCESS_TOKEN_SECRET;
 var GlobeController = require('./globe_controller'),
-    LineGraphController = require('./line_graph_controller');
+    LineGraphController = require('./line_graph_controller'),
+    Database = require('../models/database');
 
 function MasterController(io) {
   this.API = new Twitter({
@@ -15,18 +16,23 @@ function MasterController(io) {
   });
   this.globe_controller = new GlobeController(io);
   this.line_graph_controller = new LineGraphController(io);
+  this.database = new Database;
 }
 MasterController.prototype = {
   stream: function() {
+    this.setupDatabase();
     this.API.stream('filter', {'locations': '-180,-90,180,90'}, function(stream) {
-      this.line_graph_controller.setupDatabase();
       stream.on('data', function(data) {
-        this.line_graph_controller.passTweetToDatabase(data);
-        this.line_graph_controller.passTopHashtagCountsToLineGraph();
-        this.globe_controller.extractCoordinatesFromTweet(data);
-        this.globe_controller.extractHashtagsFromTweet(data);
+        this.database.store(data);
+        this.line_graph_controller.topFiveHashtags(this.database);
+        this.globe_controller.chartCoordinates(data);
+        this.globe_controller.sendHashtagTotal(data);
       }.bind(this));
     }.bind(this));
+  },
+  setupDatabase: function() {
+    this.database.setupIndicies();
+    this.database.garbageCollection();
   }
 }
 

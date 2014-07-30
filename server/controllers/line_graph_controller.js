@@ -3,19 +3,10 @@ var LineGraphView = require('../views/line_graph_view'),
 
 function LineGraphController(io) {
   this.line_graph_view = new LineGraphView(io);
-  this.database = new Database;
 }
 LineGraphController.prototype = {
-  setupDatabase: function() {
-    this.database.setupIndicies();
-    this.database.removeDeprecatedCounts();
-  },
-  passTweetToDatabase: function(tweet) {
-    this.database.extractHashtagsFromTweet(tweet);
-  },
-  passTopHashtagCountsToLineGraph: function() {
-    var topFiveHashtagCounts = this.database.calculateTopFiveHashtags(this);
-    this.line_graph_view.update(topFiveHashtagCounts);
+  topFiveHashtags: function(database) {
+    database.topFiveHashtags(this);
   }
 }
 
