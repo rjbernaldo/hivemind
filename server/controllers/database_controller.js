@@ -1,7 +1,8 @@
 var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
     mongojs = require('mongojs'),
-    db = mongojs('mongodb://' + dbuser + ':' + dbpass + '@ds059908.mongolab.com:59908/livedata');
+    // db = mongojs('mongodb://' + dbuser + ':' + dbpass + '@ds059908.mongolab.com:59908/livedata');
+    db = mongojs('tweets')
 var MS_HOUR = 3600000,
     MS_DAY = 86400000;
 var LineGraphView = require('../views/line_graph_view');

@@ -9,38 +9,39 @@ window.onload = function () {
   series5 = []; // dataPoints
   var xVal = 0; // counter to start x-axis values
   var updateInterval = 20; // how often data is pushed to series arrays (milliseconds)
-  var dataLength = 500; // number of dataPoints visible at any point
-  populateTagList(socket);
+  var dataLength = 200; // number of dataPoints visible at any point
   populateCheckBoxes(socket);
-  makeBoxesClickable();
-  makeTagsClickable();
+  makeCheckBoxesClickable();
+
 
   chart = new CanvasJS.Chart("chartContainer",{
-    title :{
-      text: "Live Random Data"
-    },
     data: [
       {
+        markerType: "none",
         type: "line",
         dataPoints: series1,
         visible: true
       },
       {
+        markerType: "none",
         type: "line",
         dataPoints: series2,
         visible: true
       },
       {
+        markerType: "none",
         type: "line",
         dataPoints: series3,
         visible: true
       },
       {
+        markerType: "none",
         type: "line",
         dataPoints: series4,
         visible: true
       },
       {
+        markerType: "none",
         type: "line",
         dataPoints: series5,
         visible: true
@@ -50,7 +51,13 @@ window.onload = function () {
       minimum: 0,
       maximum: 1000,
       interval: 100
-
+    },
+    axisX: {
+      minimum: 0,
+      interval: 1
+    },
+    toolTip: {
+      content: "#{name}<br>Number of Tweets: {y}"
     }
   });
 
@@ -64,11 +71,12 @@ window.onload = function () {
       (function(i){
         eval("series"+i).push({
           x: xVal,
-          y: holder[holder.length-1][i-1].value
+          y: holder[holder.length-1][i-1].value,
+          name: holder[0][i-1]._id
         })
       })(i)
     }
-    xVal++
+    xVal=xVal+0.02
   }, 20)
 
   var updateChart = function (count) {
@@ -77,32 +85,13 @@ window.onload = function () {
     }
 
     setYAxis();
-    checkVisible();
-
+    limitPoints(dataLength);
     chart.render();
 
   };
 
   setInterval(function(){updateChart()}, updateInterval);
 
-}
-
-function populateTagList(socket){
-  socket.on('new count', function(data){
-    for (var i = 0; i < data.length; i++){
-      $($('#tag-list').children()[i]).text(data[i]._id)
-    }
-  })
-}
-
-function checkVisible(){
-  for(var i = 0; i < 5; i++){
-    (function(i){
-      if ($('#checkbox-list').find(eval('#box'+i)).prop('checked') = true){
-        chart.options.data[i].visible^=true
-      }
-    })(i)
-  }
 }
 
 function populateCheckBoxes(socket){
@@ -113,23 +102,13 @@ function populateCheckBoxes(socket){
   })
 }
 
-function makeTagsClickable(){
+function makeCheckBoxesClickable(){
   for(var i = 0; i < 5; i++){
     (function(i){
-      $(eval("tag"+i)).on('click', function(){
+      $('#checkbox-list').find(eval('box'+i)).on('click', function(){
         chart.options.data[i].visible^=true
       })
-    })(i)
-  }
-}
-
-function makeBoxesClickable(){
-  for(var i = 0; i < 5; i++){
-    (function(i){
-      $($('#checkbox-list').children()[i]).on('click', function(){
-        console.log(event.target)
-      })
-    })(i)
+    })(i);
   }
 }
 
@@ -143,10 +122,42 @@ function setYAxis(){
       }
     }
   }
-
-  chart.options.axisY.minimum = Math.min.apply(Math, defaults)-10
-  chart.options.axisY.maximum = Math.max.apply(Math, defaults)+10
-  chart.options.axisY.interval = parseInt((chart.options.axisY.maximum-chart.options.axisY.minimum)/4)
-
+  calculateYAxisValues(defaults)
 }
 
+function calculateYAxisValues(defaults){
+  var visibleAxes = countVisibleAxes();
+  if(visibleAxes === 5){
+    chart.options.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-1000)
+    chart.options.axisY.maximum = Math.max.apply(Math, defaults)+1000
+  }else if(visibleAxes > 1){
+    chart.options.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-100)
+    chart.options.axisY.maximum = Math.max.apply(Math, defaults)+100
+  }else{
+    chart.options.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-10)
+    chart.options.axisY.maximum = Math.max.apply(Math, defaults)+10
+  }
+  chart.options.axisY.interval = parseInt((chart.options.axisY.maximum-chart.options.axisY.minimum)/4)
+}
+
+function countVisibleAxes(){
+  var count = 0;
+  for(var i=0; i < 5; i++){
+    if(chart.options.data[i].visible){
+      count++
+    }
+  }
+  return count
+}
+
+function limitPoints(dataLength){
+  firstSeries = chart.options.data[0].dataPoints
+  minX = []
+
+  if(firstSeries.length > dataLength){
+    for (var i = 0; i < firstSeries.length; i++){
+      minX.push((firstSeries[firstSeries.length-1].x)-(dataLength/50))
+    }
+    chart.options.axisX.minimum = Math.min.apply(Math, minX)
+  }
+}
