@@ -105,9 +105,7 @@ ChartModel.prototype = {
             eval("this.series"+i).shift();
           }
         }
-      })(i)
+      }.bind(this))(i)
     }
   }
 }
-
-// module.exports = chartModel

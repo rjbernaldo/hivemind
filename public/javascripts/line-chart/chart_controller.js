@@ -1,7 +1,3 @@
-// var chartView = require('chart_view');
-// var checkboxView = require('./checkbox_view');
-// var chartModel = require('./chart_model');
-
 window.onload = function(){
   socket = io.connect('/')
   var chartView = new ChartView;
@@ -30,8 +26,7 @@ ChartController.prototype = {
     setInterval(function(){
       this.chartModel.cleanHolder();
       this.chartModel.cleanSeries();
-
-    }, this.cleanInterval)
+    }.bind(this), this.cleanInterval)
 
     // set interval to update data
     setInterval(function(){

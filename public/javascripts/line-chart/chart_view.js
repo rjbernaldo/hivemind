@@ -8,5 +8,3 @@ ChartView.prototype = {
     chart.render()
   }
 }
-
-// module.exports = chartView
