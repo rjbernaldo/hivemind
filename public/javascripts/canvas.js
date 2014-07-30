@@ -1,18 +1,18 @@
 window.onload = function () {
 
   var socket = io.connect('/')
-  var holder = [] // array to hold data transmitted from socket
+  holder = [] // array to hold data transmitted from socket
   series1 = []; // dataPoints
   series2 = []; // dataPoints
   series3 = []; // dataPoints
   series4 = []; // dataPoints
   series5 = []; // dataPoints
+  series6 = []; // dataPoints
   var xVal = 0; // counter to start x-axis values
   var updateInterval = 20; // how often data is pushed to series arrays (milliseconds)
-  var dataLength = 200; // number of dataPoints visible at any point
+  var dataLength = 300; // number of dataPoints visible at any point
   populateCheckBoxes(socket);
   makeCheckBoxesClickable();
-
 
   chart = new CanvasJS.Chart("chartContainer",{
     data: [
@@ -45,6 +45,12 @@ window.onload = function () {
         type: "line",
         dataPoints: series5,
         visible: true
+      },
+      {
+        markerType: "none",
+        type: "line",
+        dataPoints: series6,
+        visible: true
       }
     ],
     axisY: {
@@ -67,28 +73,31 @@ window.onload = function () {
 
   // loadDataPoints;
   setInterval(function(){
-    for(var i = 1; i < 6; i++){
+    for(var i = 1; i < 7; i++){
       (function(i){
         eval("series"+i).push({
           x: xVal,
           y: holder[holder.length-1][i-1].value,
-          name: holder[0][i-1]._id
+          name: holder[holder.length-1][i-1]._id
         })
       })(i)
     }
     xVal=xVal+0.02
   }, 20)
 
-  var updateChart = function (count) {
-    if (holder.length > dataLength){
-      holder.shift();
-    }
-
-    setYAxis();
+  var updateChart = function() {
+    setYAxis(); // maybe set to slower interval
     limitPoints(dataLength);
     chart.render();
-
   };
+
+  setInterval(function(){
+    removeSeriesData();
+  }, 20)
+
+  setInterval(function(){
+    removeHolderData();
+  }, 10000)
 
   setInterval(function(){updateChart()}, updateInterval);
 
@@ -103,7 +112,7 @@ function populateCheckBoxes(socket){
 }
 
 function makeCheckBoxesClickable(){
-  for(var i = 0; i < 5; i++){
+  for(var i = 0; i < 6; i++){
     (function(i){
       $('#checkbox-list').find(eval('box'+i)).on('click', function(){
         chart.options.data[i].visible^=true
@@ -114,8 +123,7 @@ function makeCheckBoxesClickable(){
 
 function setYAxis(){
   var defaults = [];
-
-  for (var i = 0; i < 5; i++){
+  for (var i = 0; i < 6; i++){
     if(chart.options.data[i].visible){
       for (var j = 0; j < chart.options.data[i].dataPoints.length; j++){
         defaults.push(chart.options.data[i].dataPoints[j].y)
@@ -127,7 +135,7 @@ function setYAxis(){
 
 function calculateYAxisValues(defaults){
   var visibleAxes = countVisibleAxes();
-  if(visibleAxes === 5){
+  if(visibleAxes === 6){
     chart.options.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-1000)
     chart.options.axisY.maximum = Math.max.apply(Math, defaults)+1000
   }else if(visibleAxes > 1){
@@ -142,7 +150,7 @@ function calculateYAxisValues(defaults){
 
 function countVisibleAxes(){
   var count = 0;
-  for(var i=0; i < 5; i++){
+  for(var i=0; i < 6; i++){
     if(chart.options.data[i].visible){
       count++
     }
@@ -159,5 +167,25 @@ function limitPoints(dataLength){
       minX.push((firstSeries[firstSeries.length-1].x)-(dataLength/50))
     }
     chart.options.axisX.minimum = Math.min.apply(Math, minX)
+  }
+}
+
+function removeSeriesData(){
+  for(var i = 1; i < 7; i++){
+    (function(i){
+      if (eval("series"+i).length > 500){
+        for(var j = 0; j < 10; j++){
+          eval("series"+i).shift();
+        }
+      }
+    })(i)
+  }
+}
+
+function removeHolderData(){
+  if (holder.length > 5000){
+    for(var i = 0; i < 2000; i++){
+      holder.shift();
+    }
   }
 }

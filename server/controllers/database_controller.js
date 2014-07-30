@@ -40,7 +40,7 @@ DatabaseController.prototype = {
     });
   },
   calculateTopFiveHashtags: function() {
-    var query = db.collection('counts').find({}).sort({value: -1}).limit(5)
+    var query = db.collection('counts').find({}).sort({value: -1}).limit(6)
     query.toArray(function(error, topFiveHashtagCounts){
       this.line_graph_view.draw(topFiveHashtagCounts);
     }.bind(this));

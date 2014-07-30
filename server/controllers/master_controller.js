@@ -6,7 +6,8 @@ var Twitter = require('twitter'),
 var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
     mongojs = require('mongojs'),
-    db = mongojs('mongodb://' + dbuser + ':' + dbpass + '@ds059908.mongolab.com:59908/livedata');
+    // db = mongojs('mongodb://' + dbuser + ':' + dbpass + '@ds059908.mongolab.com:59908/livedata');
+    db = mongojs('tweets')
 var GlobeController = require('./globe_controller'),
     DatabaseController = require('./database_controller');
 
