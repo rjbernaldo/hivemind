@@ -1,7 +1,6 @@
 var request = require('request'),
     mongojs = require('mongojs'),
-    db = mongojs("test"),
-    controllers = ('../mainController.js');
+    db = mongojs("test");
 
 describe('routes', function() {
   describe('index', function() {
