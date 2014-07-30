@@ -42,7 +42,8 @@ UI.HashtagCount = (function() {
 UI.View = (function() {
   var tweetCountDom = document.getElementsByClassName('tweetCount');
   var hashtagCountDom = document.getElementsByClassName('hashtagCount');
-  var tweetTimeCountDom = document.getElementsByClassName('tweetCountDescription')
+  var tweetTimeCountDom = document.getElementsByClassName('tweetCountDescription');
+  var hashtagTimeCountDom = document.getElementsByClassName('hashtagCountDescription');
   // var countryCountDom = document.getElementsByClassName('something');
 
   function animateDescription() {
@@ -52,7 +53,7 @@ UI.View = (function() {
         $('#what').css('display','none')
         $('#explanation').css('display','block')
         $('#explanation').removeClass('flipOutX')
-        $('#explanation').addClass('flipInX')        
+        $('#explanation').addClass('flipInX')
         },
       function(){
         $('#explanation').removeClass('flipInX')
@@ -114,7 +115,8 @@ UI.View = (function() {
       hashtagCountDom[0].innerHTML = data
     },
     updateTimeCount: function(count) {
-      tweetTimeCountDom[0].innerHTML = 'The amount of tweets streamed in the last ' + count + ' seconds.'
+      tweetTimeCountDom[0].innerHTML = 'The amount of tweets streamed in the last ' + count + ' seconds.';
+      hashtagTimeCountDom[0].innerHTML = 'The amount of tags processed in the last ' + count + ' seconds.';
     }
   }
 })();

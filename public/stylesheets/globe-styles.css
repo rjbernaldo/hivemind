@@ -22,7 +22,7 @@ body {
   position:absolute;
   left: 20px;
   top: 20px;
-  
+
 }
 
 .tweetCountDescription {
@@ -73,8 +73,8 @@ body {
 #watching {
   background-color: rgba(0,0,0,0.8);
   position: absolute;
-  top: 45%;
-  left: 50px;
+  top: 65%;
+  right: 12%;
   min-width: 125px;
   color:#aaa;
   padding:5px;
