@@ -14,7 +14,7 @@ LineGraphController.prototype = {
     this.database.extractHashtagsFromTweet(tweet);
   },
   passTopHashtagCountsToLineGraph: function() {
-    var topFiveHashtagCounts = this.database.calculateTopFiveHashtags();
+    var topFiveHashtagCounts = this.database.calculateTopFiveHashtags(this);
     this.line_graph_view.update(topFiveHashtagCounts);
   }
 }

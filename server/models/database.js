@@ -43,15 +43,11 @@ Database.prototype = {
       out: {merge: "counts"}
     });
   },
-  calculateTopFiveHashtags: function() {
-    var cursor = db.collection('counts').find({}).sort({value: -1}).limit(5)
-    var query_results = []
-    cursor.forEach(function(document) {
-      console.log(document)
-      // query_results.push(document);
-    })
-    // console.log(query_results);
-    return query_results;
+  calculateTopFiveHashtags: function(controller) {
+    var cursor = db.collection('counts').find({}).sort({value: -1}).limit(5);
+    cursor.toArray(function(error, topFiveHashtagCounts) {
+      controller.line_graph_view.update(topFiveHashtagCounts);
+    });
   }
 }
 
