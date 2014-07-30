@@ -1,15 +1,15 @@
 var GlobeView = require('../views/globe_view')
 
-function GlobeController(io) {this.view = new GlobeView(io);}
+function GlobeController(io) {this.globe_view = new GlobeView(io);}
 GlobeController.prototype = {
-  extractCoordinates: function(tweet) {
+  extractCoordinatesFromTweet: function(tweet) {
     if (tweet.coordinates) {
-      this.view.chartCoordinates(tweet.coordinates.coordinates);
+      this.globe_view.chartCoordinates(tweet.coordinates.coordinates);
     }
   },
-  extractHashtags: function(tweet) {
+  extractHashtagsFromTweet: function(tweet) {
     if (tweet.entities) {
-      this.view.sendHashtagCount(tweet.entities.hashtags.length);
+      this.globe_view.sendHashtagCount(tweet.entities.hashtags.length);
     }
   }
 }

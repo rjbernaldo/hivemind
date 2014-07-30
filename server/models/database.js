@@ -1,13 +1,23 @@
 var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
     mongojs = require('mongojs'),
-    db = mongojs('mongodb://' + dbuser + ':' + dbpass + '@ds059908.mongolab.com:59908/livedata');
+    db = mongojs(process.env.DATABASE);
 var MS_HOUR = 3600000,
     MS_DAY = 86400000;
-var LineGraphView = require('../views/line_graph_view');
 
-function DatabaseController(io) {this.line_graph_view = new LineGraphView(io);}
-DatabaseController.prototype = {
+function Database() {}
+
+Database.prototype = {
+  extractHashtagsFromTweet: function(tweet) {
+    if (tweet.entities && tweet.entities.hashtags.length > 0) {
+      this.storeHashtags(tweet);
+    }
+  },
+  setupIndicies: function() {
+    db.collection('hashtags').createIndex({'hashtag': 1});
+    db.collection('hashtags').createIndex({'timestamp': 1});
+    db.collection('counts').createIndex({'value': -1});
+  },
   removeDeprecatedCounts: function() {
     setInterval(function() {
       db.collection('counts').remove({value: 1});
@@ -15,11 +25,6 @@ DatabaseController.prototype = {
   },
   removeDeprecatedHashtags: function() {
     db.collection('hashtags').remove({timestamp: {"$lt": Date.now() - MS_DAY}})
-  },
-  extractHashtags: function(tweet) {
-    if (tweet.entities && tweet.entities.hashtags.length > 0) {
-      this.storeHashtags(tweet);
-    }
   },
   storeHashtags: function(tweet) {
     for (var i = 0; i < tweet.entities.hashtags.length; i++) {
@@ -38,12 +43,12 @@ DatabaseController.prototype = {
       out: {merge: "counts"}
     });
   },
-  calculateTopFiveHashtags: function() {
-    var query = db.collection('counts').find({}).sort({value: -1}).limit(5)
-    query.toArray(function(error, topFiveHashtagCounts){
-      this.line_graph_view.draw(topFiveHashtagCounts);
-    }.bind(this));
+  calculateTopFiveHashtags: function(controller) {
+    var cursor = db.collection('counts').find({}).sort({value: -1}).limit(5);
+    cursor.toArray(function(error, topFiveHashtagCounts) {
+      controller.line_graph_view.update(topFiveHashtagCounts);
+    });
   }
 }
 
-module.exports = DatabaseController;
+module.exports = Database;
