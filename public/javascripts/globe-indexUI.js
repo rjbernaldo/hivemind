@@ -81,7 +81,7 @@ UI.View = (function() {
         }, 500)
       }
     )
-  }
+  };
 
   function hoverHashtagCount() {
     $('.hashtagCountContainer').hover(
