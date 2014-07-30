@@ -3,7 +3,7 @@ GlobeView.prototype = {
   chartCoordinates: function(coordinates) {
     this.io.sockets.emit('newGlobeTweet', coordinates);
   },
-  sendHashtagCount: function(count) {
+  sendHashtagTotal: function(count) {
     this.io.sockets.emit('newHashtag', count);
   }
 }

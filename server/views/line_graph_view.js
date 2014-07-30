@@ -1,6 +1,6 @@
 function LineGraphView(io) {this.io = io;}
 LineGraphView.prototype = {
-  draw: function(topHashtagCounts) {
+  update: function(topHashtagCounts) {
     this.io.sockets.emit('new count', topHashtagCounts);
   }
 }
