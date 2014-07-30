@@ -6,7 +6,8 @@ var Twitter = require('twitter'),
 var dbuser = process.env.DBUSER,
     dbpass = process.env.DBPASSWORD,
     mongojs = require('mongojs'),
-    db = mongojs('mongodb://' + dbuser + ':' + dbpass + '@ds059908.mongolab.com:59908/livedata');
+    // db = mongojs('mongodb://' + dbuser + ':' + dbpass + '@ds059908.mongolab.com:59908/livedata');
+    db = mongojs('tweets')
 var MS_HOUR = 3600000,
     MS_DAY = 86400000
 
@@ -103,7 +104,7 @@ DatabaseController.prototype = {
     });
   },
   calculateTopFiveHashtags: function() {
-    var query = db.collection('hashtagCount').find({}).sort({value: -1}).limit(5)
+    var query = db.collection('counts').find({}).sort({value: -1}).limit(5)
     query.toArray(function(error, topFiveHashtagCounts){
       this.line_graph_view.draw(topFiveHashtagCounts);
     }.bind(this));

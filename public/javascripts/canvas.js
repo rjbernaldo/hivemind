@@ -10,7 +10,9 @@ window.onload = function () {
   var xVal = 0; // counter to start x-axis values
   var updateInterval = 20; // how often data is pushed to series arrays (milliseconds)
   var dataLength = 500; // number of dataPoints visible at any point
-  populateTagList(socket)
+  populateTagList(socket);
+  populateCheckBoxes(socket);
+  makeBoxesClickable();
   makeTagsClickable();
 
   chart = new CanvasJS.Chart("chartContainer",{
@@ -75,6 +77,7 @@ window.onload = function () {
     }
 
     setYAxis();
+    checkVisible();
 
     chart.render();
 
@@ -92,11 +95,39 @@ function populateTagList(socket){
   })
 }
 
+function checkVisible(){
+  for(var i = 0; i < 5; i++){
+    (function(i){
+      if ($('#checkbox-list').find(eval('#box'+i)).prop('checked') = true){
+        chart.options.data[i].visible^=true
+      }
+    })(i)
+  }
+}
+
+function populateCheckBoxes(socket){
+  socket.on('new count', function(data){
+    for (var i = 0; i < data.length; i++){
+      $('#checkbox-list').children().find(eval('label'+i)).text(data[i]._id);
+    }
+  })
+}
+
 function makeTagsClickable(){
   for(var i = 0; i < 5; i++){
     (function(i){
       $(eval("tag"+i)).on('click', function(){
         chart.options.data[i].visible^=true
+      })
+    })(i)
+  }
+}
+
+function makeBoxesClickable(){
+  for(var i = 0; i < 5; i++){
+    (function(i){
+      $($('#checkbox-list').children()[i]).on('click', function(){
+        console.log(event.target)
       })
     })(i)
   }
@@ -118,3 +149,4 @@ function setYAxis(){
   chart.options.axisY.interval = parseInt((chart.options.axisY.maximum-chart.options.axisY.minimum)/4)
 
 }
+
