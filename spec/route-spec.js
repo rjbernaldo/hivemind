@@ -7,7 +7,7 @@ var request = require('request'),
     mongojs = require('mongojs'),
     db = mongojs("test");
 var GlobeController = require('../server/controllers/globe_controller'),
-    DatabaseController = require('../server/controllers/database_controller');
+    LineGraphController = require('../server/controllers/line_graph_controller');
 
 describe('routes', function() {
   describe('globe and index page', function() {
@@ -29,17 +29,17 @@ describe('routes', function() {
 describe('database controller', function() {
   describe('extractHashtags method', function() {
     beforeEach(function() {
-      var database_controller = new DatabaseController;
+      var line_graph_controller = new LineGraphController;
     });
     it("calls storeHashtags method if the given tweet has hashtags", function() {
       var fake_tweet = {entities: {hashtags: ["hashtag1", "hashtag2", "hashtag3"]}};
-      database_controller.extractHashtags(fake_tweet);
-      expect(database_controller.storeHashtags).toHaveBeenCalled();
+      line_graph_controller.extractHashtags(fake_tweet);
+      expect(line_graph_controller.storeHashtags).toHaveBeenCalled();
     });
     it("doesn't call storeHashtags method if the given tweet doesn't have hashtags", function() {
       var fake_tweet = {entities: {hashtags: []}};
-      database_controller.extractHashtags(fake_tweet);
-      expect(database_controller.storeHashtags).not.toHaveBeenCalled();
+      line_graph_controller.extractHashtags(fake_tweet);
+      expect(line_graph_controller.storeHashtags).not.toHaveBeenCalled();
     });
   });
   describe('removeDeprecatedCounts method', function() {

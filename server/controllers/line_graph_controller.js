@@ -1,11 +1,11 @@
 var LineGraphView = require('../views/line_graph_view'),
     Database = require('../models/database');
 
-function DatabaseController(io) {
+function LineGraphController(io) {
   this.line_graph_view = new LineGraphView(io);
   this.database = new Database;
 }
-DatabaseController.prototype = {
+LineGraphController.prototype = {
   setupDatabase: function() {
     this.database.setupIndicies();
     this.database.removeDeprecatedCounts();
@@ -19,4 +19,4 @@ DatabaseController.prototype = {
   }
 }
 
-module.exports = DatabaseController;
+module.exports = LineGraphController;
