@@ -5,6 +5,6 @@ var app = require('../app');
 var server = require('http').Server(app);
 server.listen(process.env.PORT || 3000);
 
-// require io and initialize main controller
+// require io and initialize master controller
 var io = require('socket.io')(server);
-var mainController = require('../mainController')(io);
+var master_controller = require('../server/controllers/master_controller.js')(io);

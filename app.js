@@ -8,7 +8,6 @@ var dotenv = require('dotenv'),
 // load environment
 dotenv.load();
 
-
 // set views path and engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
