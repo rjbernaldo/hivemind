@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "express": "~4.2.0",
@@ -13,7 +13,6 @@
     "twitter": "*",
     "mongojs": "*",
     "dotenv": "0.4.0",
-    "newrelic": "*",
     "request": "*",
     "forever": "*"
   }
