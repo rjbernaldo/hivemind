@@ -6,8 +6,7 @@ var Twitter = require('twitter'),
 var request = require('request'),
     mongojs = require('mongojs'),
     db = mongojs("test");
-var GlobeController = require('../server/controllers/globe_controller'),
-    LineGraphController = require('../server/controllers/line_graph_controller');
+var TweetParser = require('../server/models/tweet_parser');
 
 describe('routes', function() {
   describe('globe and index page', function() {
@@ -26,54 +25,19 @@ describe('routes', function() {
   });
 });
 
-describe('database controller', function() {
-  describe('extractHashtags method', function() {
-    beforeEach(function() {
-      var line_graph_controller = new LineGraphController;
-    });
-    it("calls storeHashtags method if the given tweet has hashtags", function() {
-      var fake_tweet = {entities: {hashtags: ["hashtag1", "hashtag2", "hashtag3"]}};
-      line_graph_controller.extractHashtags(fake_tweet);
-      expect(line_graph_controller.storeHashtags).toHaveBeenCalled();
-    });
-    it("doesn't call storeHashtags method if the given tweet doesn't have hashtags", function() {
-      var fake_tweet = {entities: {hashtags: []}};
-      line_graph_controller.extractHashtags(fake_tweet);
-      expect(line_graph_controller.storeHashtags).not.toHaveBeenCalled();
-    });
+process.env.DATABASE = ""
+
+describe('tweet parser model', function() {
+  beforeEach(function() {
+
   });
-  describe('removeDeprecatedCounts method', function() {
-    it("removes counts with a value of 1 from the database each hour", function() {
+  it("extracts hashtags from a given tweet", function() {
 
-    });
   });
-  describe('removeDeprecatedHashtags method', function() {
-    it("removes hashtags older than 24 hours from the database", function() {
+  it("returns empty array if given tweet lacks hashtags", function() {
 
-    });
   });
-  describe('storeHashtags method', function() {
-    it("stores each hashtag associated with a given tweet in the database", function() {
+  it("extracts coordinates from a given tweet", function() {
 
-    });
-    it("calls updateCounts method for each hashtag", function() {
-
-    });
-    it("calls removeDeprecatedHashtags method", function() {
-
-    });
-  });
-  describe('updateCounts method', function() {
-    it("??????", function() {
-
-    });
-  });
-  describe('calculateTopFiveHashtags method', function() {
-    it("successfully queries for the five most frequently occuring hashtags in the database", function() {
-
-    });
-    it("calls the draw method on the line_graph_view object", function() {
-
-    });
   });
 });

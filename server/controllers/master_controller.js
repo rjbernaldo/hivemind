@@ -1,22 +1,23 @@
-var Twitter = require('twitter'),
-    consumer_key = process.env.CONSUMER_KEY,
-    consumer_secret = process.env.CONSUMER_SECRET,
-    access_token_key = process.env.ACCESS_TOKEN_KEY,
-    access_token_secret = process.env.ACCESS_TOKEN_SECRET;
-var GlobeController = require('./globe_controller'),
-    LineGraphController = require('./line_graph_controller'),
-    Database = require('../models/database');
+// var Twitter = require('twitter'),
+//     consumer_key = process.env.CONSUMER_KEY,
+//     consumer_secret = process.env.CONSUMER_SECRET,
+//     access_token_key = process.env.ACCESS_TOKEN_KEY,
+//     access_token_secret = process.env.ACCESS_TOKEN_SECRET;
+// var GlobeController = require('./globe_controller'),
+//     LineGraphController = require('./line_graph_controller'),
+//     Database = require('../models/database');
+var config = require('../config');
 
 function MasterController(io) {
-  this.API = new Twitter({
-    consumer_key: consumer_key,
-    consumer_secret: consumer_secret,
-    access_token_key: access_token_key,
-    access_token_secret: access_token_secret
+  this.API = new config.Twitter({
+    consumer_key: config.consumer_key,
+    consumer_secret: config.consumer_secret,
+    access_token_key: config.access_token_key,
+    access_token_secret: config.access_token_secret
   });
-  this.globe_controller = new GlobeController(io);
-  this.line_graph_controller = new LineGraphController(io);
-  this.database = new Database;
+  this.globe_controller = new config.GlobeController(io);
+  this.line_graph_controller = new config.LineGraphController(io);
+  this.database = new config.Database;
 }
 MasterController.prototype = {
   stream: function() {

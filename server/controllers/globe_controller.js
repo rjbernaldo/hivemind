@@ -1,10 +1,12 @@
-var GlobeView = require('../views/globe_view'),
-    TweetParser = require('../models/tweet_parser');
+// var GlobeView = require('../views/globe_view'),
+//     TweetParser = require('../models/tweet_parser');
 
-function GlobeController(io) {this.globe_view = new GlobeView(io);}
+var config = require('../config');
+
+function GlobeController(io) {this.globe_view = new config.GlobeView(io);}
 GlobeController.prototype = {
   chartCoordinates: function(tweet) {
-    var coordinates = (new TweetParser).extractCoordinates(tweet);
+    var coordinates = (new config.TweetParser).extractCoordinates(tweet);
     if (coordinates) {
       this.globe_view.chartCoordinates(coordinates);
     }
