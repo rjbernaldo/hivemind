@@ -1,16 +1,30 @@
+body {
+  margin-top: 70px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: black;
+}
+
+#chartContainer{
+  width: 80%;
+  margin: auto;
+}
+
 #checkbox-list{
+  margin: auto;
   margin-top: 450px;
-  width: 100%;
+  width: 60%;
 }
 
 #top-three{
-  width: 45%;
+  width: 40%;
   display: inline-block;
+  padding-left: 80px;
 }
 
 #bottom-three{
-  width: 45%;
+  width: 40%;
   display: inline-block;
+  padding-left: 80px;
 }
 
 .hashtag-label {
@@ -30,7 +44,6 @@
   top: 20px;
   right: 20px;
   height: 50px;
-
 }
 
 .globe-button img {
@@ -40,11 +53,6 @@
 .graph-title {
   color: white;
   text-align: center;
-}
-
-body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: black;
 }
 
 .label0 {

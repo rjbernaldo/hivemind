@@ -11,8 +11,8 @@ CheckBoxView.prototype = {
   makeCheckBoxesClickable: function(chart){
     for(var i = 0; i < 6; i++){
       (function(i){
-        $('#checkbox-list').children().find(eval('label'+i)).on('click', function(){
-          chart.data[i].visible^=true
+        $('.label'+i).on('click', function(){
+          chart.data[i].visible^=true;
         })
       })(i);
     }

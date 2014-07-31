@@ -18,7 +18,7 @@ function ChartModel(){
       {markerType: "none", type: "line", dataPoints: this.series5, visible: false, color: "#66FFFF", lineThickness: 4}
     ],
     axisY: {minimum: 0, maximum: 10000, interval: 100, lineThickness: 0, labelFontColor: "white", tickThickness: 0, gridThickness: 0 },
-    axisX: {minimum: 0, interval: 1, lineThickness: 0, labelFontColor: "white", tickThickness: 0 },
+    axisX: {minimum: 0, interval: 1, lineThickness: 0, labelFontColor: "black", tickThickness: 2, tickLength: 3, tickColor: 'white' },
     toolTip: {content: "#{name}<br>Number of Tweets: {y}"},
     backgroundColor: "black"
   }
@@ -56,15 +56,15 @@ ChartModel.prototype = {
 
   calculateYAxisValues: function(defaults){
     var visibleAxes = this.countVisibleAxes();
-    if(visibleAxes === 6){
+    if(visibleAxes >= 4){
       this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-1000)
       this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+1000
-    }else if(visibleAxes > 1){
-      this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-100)
-      this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+100
+    }else if(visibleAxes >= 2 && visibleAxes <= 3){
+      this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-300)
+      this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+300
     }else{
-      this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-10)
-      this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+10
+      this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-50)
+      this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+50
     }
     this.chartObject.axisY.interval = parseInt((this.chartObject.axisY.maximum-this.chartObject.axisY.minimum)/4)
   },
@@ -99,14 +99,13 @@ ChartModel.prototype = {
   },
 
   cleanSeries: function(){
-    for(var i = 1; i < this.holder[0].length; i++){
-      (function(i){
-        if (eval("this.series"+i).length > 500){
-          for(var j = 0; j < 20; j++){
-            eval("this.series"+i).shift();
-          }
+    for(var i = 0; i < this.holder[0].length; i++){
+      if (eval("this.series"+i).length > 500){
+        debugger
+        for(var j = 0; j < 200; j++){
+          eval("this.series"+i).shift();
         }
-      }.bind(this))(i)
+      }
     }
   }
 }

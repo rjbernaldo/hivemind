@@ -35,7 +35,6 @@ ChartController.prototype = {
       this.chartModel.populateSeries(updateInterval);
       this.chartModel.updateYAxis();
       this.chartModel.updateXAxis();
-      var chartObject = this.chartModel.chartObject
       this.chartView.renderChart(chart)
     }.bind(this), updateInterval)
 
