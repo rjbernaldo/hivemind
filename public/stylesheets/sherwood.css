@@ -1,0 +1,62 @@
+body {
+  margin: 0px;
+  background-color: #85D6FF;
+  font-family: 'Lucida Grande';
+}
+
+.panel {
+  height: 1000px;
+  width: 100%;
+}
+
+.counters {
+  background-color: #66CCFF;
+  text-align: center;
+}
+
+.linegraph {
+  background-color: #9DDEFF;
+}
+
+.footer {
+  background-color: #BAE8FF;
+  width: 100%;
+  height: 50px;
+}
+
+.globe {
+  color: #31627A;
+  font-size: 3rem;
+  margin-left: 3rem;
+  margin-top: 3rem;
+  position: absolute;
+}
+
+.count {
+  margin-top: 2rem;
+  font-size: 7rem;
+}
+
+.label {
+  font-size: 5rem;
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+.counter {
+  text-align: center;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.sublabel {
+  color: #31627A;
+  font-size: 3rem;
+}
+
+.counters_container {
+  width: 60%;
+  padding-top: 5rem;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -52,7 +52,7 @@ UI.View = (function() {
         $('#what').css('display','none')
         $('#explanation').css('display','block')
         $('#explanation').removeClass('flipOutX')
-        $('#explanation').addClass('flipInX')        
+        $('#explanation').addClass('flipInX')
         },
       function(){
         $('#explanation').removeClass('flipInX')
@@ -114,7 +114,7 @@ UI.View = (function() {
       hashtagCountDom[0].innerHTML = data
     },
     updateTimeCount: function(count) {
-      tweetTimeCountDom[0].innerHTML = 'The amount of tweets streamed in the last ' + count + ' seconds.'
+      tweetTimeCountDom[0].innerHTML = 'Number of tweets analyzed in the past ' + count + ' seconds.'
     }
   }
 })();
