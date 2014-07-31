@@ -25,6 +25,18 @@
   cursor: pointer;
 }
 
+.globe-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  height: 50px;
+
+}
+
+.globe-button img {
+  height: 100%
+}
+
 .graph-title {
   color: white;
   text-align: center;

@@ -100,11 +100,30 @@ UI.View = (function() {
     )
   }
 
+  function hoverGithub(){
+    $('#github-link').hover(
+      function() {
+        $('#fork-github').css('display','block')
+        $('#fork-github').removeClass('flipOutX')
+        $('#fork-github').addClass('flipInX')
+      },
+      function() {
+        $('#fork-github').removeClass('flipInX')
+        $('#fork-github').addClass('flipOutX')
+        setTimeout(function(){
+          $('#fork-github').css('display','none')
+        }, 500)
+      }
+    )
+  }
+
   return {
     init: function() {
       animateDescription();
       hoverHashtagCount();
       hoverTweetCount();
+      hoverGithub();
+      // facebookShare();
       // initializeCountryCount();
     },
     updateTweetCount: function(count) {
