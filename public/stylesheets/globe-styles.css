@@ -137,11 +137,41 @@ a:hover {
   padding: 10px;
 }
 
+#fb-like {
+  position: absolute;
+  right: 15px;
+  bottom: 35px;
+  height: 30px;
+}
+
+#tweet-us {
+  position: absolute;
+  right: 15px;
+  bottom: 70px;
+  height: 30px;
+}
+
+ #custom-tweet-button a {
+    display: block;
+    padding: 2px 5px 2px 20px;
+    background: url('https://twitter.com/favicons/favicon.ico') 1px center no-repeat;
+    border: 1px solid #ccc;
+  }
+
+#fork-github {
+  position: absolute;
+  right:52px;
+  bottom: 112px;
+  display:none;
+}
+
 #github-link {
   height:30px;
+  position: absolute;
+  right:15px;
+  bottom:110px;
 }
 
 #github-link img {
   height: 100%;
-  float:right;
 }

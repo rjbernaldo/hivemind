@@ -46,7 +46,7 @@ UI.View = (function() {
   // var countryCountDom = document.getElementsByClassName('something');
 
   function animateDescription() {
-    $('#watching').toggle(
+    $('#watching').hover(
       function(){
         $('#what').addClass('flipOutX')
         $('#what').css('display','none')
@@ -58,6 +58,7 @@ UI.View = (function() {
         $('#explanation').removeClass('flipInX')
         $('#explanation').addClass('flipOutX')
         setTimeout(function(){
+          $('#explanation').css('display','none')
           $('#what').css('display','block')
           $('#what').removeClass('flipOutX')
           $('#what').addClass('flipInX')
@@ -100,11 +101,30 @@ UI.View = (function() {
     )
   }
 
+  function hoverGithub(){
+    $('#github-link').hover(
+      function() {
+        $('#fork-github').css('display','block')
+        $('#fork-github').removeClass('flipOutX')
+        $('#fork-github').addClass('flipInX')
+      },
+      function() {
+        $('#fork-github').removeClass('flipInX')
+        $('#fork-github').addClass('flipOutX')
+        setTimeout(function(){
+          $('#fork-github').css('display','none')
+        }, 500)
+      }
+    )
+  }
+
   return {
     init: function() {
       animateDescription();
       hoverHashtagCount();
       hoverTweetCount();
+      hoverGithub();
+      // facebookShare();
       // initializeCountryCount();
     },
     updateTweetCount: function(count) {
