@@ -13,51 +13,53 @@
   display: inline-block;
 }
 
-
 .hashtag-label {
   font-size: 23px;
   font-family: sans-serif;
   color: green;
+  padding: 3px;
 }
 
 .hashtag-label:hover {
   font-size: 25px;
+  cursor: pointer;
 }
 
 .graph-title {
-  color: green;
+  color: white;
   text-align: center;
 }
 
 body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: black;
 }
 
-#label0, .number0 {
+.label0 {
   color: #4099FF;
 }
 
-#label1, .number1 {
+.label1 {
   color: #87DBFA;
 }
 
-#label2, .number2 {
+.label2 {
   color: #BCDBFD;
 }
 
-#label3, .number3 {
+.label3 {
   color: #4F7EB3;
 }
 
-#label4, .number4 {
+.label4 {
   color: #87CACF;
 }
 
-#label5, .number5 {
+.label5 {
   color: #66FFFF;
 }
 
 .faded {
-  color: #aaa;
+  color: #292B2B;
 }
 
