@@ -46,9 +46,7 @@ ChartController.prototype = {
       this.chartModel.streamToHolder(data)
       this.checkBoxView.populateCheckBoxes(data)
     }.bind(this))
-    $('.hashtag-label').on('click', function(event){
-      $(event.target).css('color', '#aaa')
-    })
+    this.checkBoxView.makeCheckBoxesToggleable();
   }
 
 }

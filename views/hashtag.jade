@@ -5,37 +5,25 @@ block content
   #chartContainer
   #checkbox-list
     #top-three
-      .hashtag-label
-        label
-          input(type='checkbox', name='box0', id = 'box0', checked='checked')
-          span(class='number0') 1.
-            span(id='label0')
-      .hashtag-label
-        label
-          input(type='checkbox', name='box1', id = 'box1', checked='checked')
-          span(class='number1') 2.
-            span(id='label1')
-      .hashtag-label
-        label
-          input(type='checkbox', name='box2', id = 'box2', checked='checked')
-          span(class='number2') 3.
-            span(id='label2')
+      .hashtag-label.label0
+        span 1.
+        span(id='label0')
+      .hashtag-label.label1
+        span 2.
+        span(id='label1')
+      .hashtag-label.label2
+        span 3.
+        span(id='label2')
     #bottom-three
-      .hashtag-label
-        label
-          input(type='checkbox', name='box3', id = 'box3', checked='checked')
-          span(class='number3') 4.
-            span(id='label3')
-      .hashtag-label
-        label
-          input(type='checkbox', name='box4', id = 'box4', checked='checked')
-          span(class='number4') 5.
-            span(id='label4')
-      .hashtag-label
-        label
-          input(type='checkbox', name='box5', id = 'box5', checked='checked')
-          span(class='number5') 6.
-            span(id='label5')
+      .hashtag-label.label3
+        span 4.
+        span(id='label3')
+      .hashtag-label.label4
+        span 5.
+        span(id='label4')
+      .hashtag-label.label5
+        span 6.
+        span(id='label5')
   link(rel="stylesheet" href="/stylesheets/graph-styles.css")
   script(src="/socket.io/socket.io.js")
   script(src="/javascripts/line_chart/chart_view.js")

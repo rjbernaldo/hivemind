@@ -33,27 +33,30 @@ body {
 }
 
 #label0, .number0 {
-  color: #0099CC;
+  color: #4099FF;
 }
 
 #label1, .number1 {
-  color: #CCFFCC;
+  color: #87DBFA;
 }
 
 #label2, .number2 {
-  color: #66CCFF;
+  color: #BCDBFD;
 }
 
 #label3, .number3 {
-  color: #FFFF33;
+  color: #4F7EB3;
 }
 
 #label4, .number4 {
-  color: #66FFFF;
+  color: #87CACF;
 }
 
 #label5, .number5 {
-  color: #FEFCD7;
+  color: #66FFFF;
 }
 
+.faded {
+  color: #aaa;
+}
 

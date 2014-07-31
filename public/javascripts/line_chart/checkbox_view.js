@@ -11,10 +11,21 @@ CheckBoxView.prototype = {
   makeCheckBoxesClickable: function(chart){
     for(var i = 0; i < 6; i++){
       (function(i){
-        $('#checkbox-list').find(eval('box'+i)).on('click', function(){
+        $('#checkbox-list').children().find(eval('label'+i)).on('click', function(){
           chart.data[i].visible^=true
         })
       })(i);
     }
+  },
+  makeCheckBoxesToggleable: function(){
+    // $('.hashtag-label').on('click', function(event){
+    //   $(event.target).css('color', '#aaa')
+    //   $($(event.target).parent()).css('color', '#aaa')
+    // })
+    $('.hashtag-label').on('click', function(event){
+      // debugger
+      $(this).toggleClass("faded");
+      // $(this).
+    })
   }
 }
