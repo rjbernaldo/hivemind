@@ -1,5 +1,6 @@
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                               window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+var MOUSE_TOGGLE = false;
 /**
  * dat.globe Javascript WebGL Globe Toolkit
  * http://dataarts.github.com/dat.globe
@@ -153,10 +154,6 @@ DAT.Globe = function(container, opts) {
 
     container.addEventListener('mousedown', onMouseDown, false);
 
-    container.addEventListener('mousewheel', onMouseWheel, false);
-
-    document.addEventListener('keydown', onDocumentKeyDown, false);
-
     window.addEventListener('resize', onWindowResize, false);
 
     container.addEventListener('mouseover', function() {
@@ -242,6 +239,8 @@ DAT.Globe = function(container, opts) {
   function onMouseDown(event) {
     event.preventDefault();
 
+    MOUSE_TOGGLE = true;
+
     container.addEventListener('mousemove', onMouseMove, false);
     container.addEventListener('mouseup', onMouseUp, false);
     container.addEventListener('mouseout', onMouseOut, false);
@@ -270,6 +269,7 @@ DAT.Globe = function(container, opts) {
   }
 
   function onMouseUp(event) {
+    MOUSE_TOGGLE = false;
     container.removeEventListener('mousemove', onMouseMove, false);
     container.removeEventListener('mouseup', onMouseUp, false);
     container.removeEventListener('mouseout', onMouseOut, false);
@@ -280,27 +280,6 @@ DAT.Globe = function(container, opts) {
     container.removeEventListener('mousemove', onMouseMove, false);
     container.removeEventListener('mouseup', onMouseUp, false);
     container.removeEventListener('mouseout', onMouseOut, false);
-  }
-
-  function onMouseWheel(event) {
-    event.preventDefault();
-    if (overRenderer) {
-      zoom(event.wheelDeltaY * 0.3);
-    }
-    return false;
-  }
-
-  function onDocumentKeyDown(event) {
-    switch (event.keyCode) {
-      case 38:
-        zoom(100);
-        event.preventDefault();
-        break;
-      case 40:
-        zoom(-100);
-        event.preventDefault();
-        break;
-    }
   }
 
   function onWindowResize( event ) {
@@ -316,12 +295,16 @@ DAT.Globe = function(container, opts) {
   }
 
   function animate() {
-    requestAnimationFrame(animate);
+    window.requestAnimationFrame(animate);
     render();
   }
 
   function render() {
     zoom(curZoomSpeed);
+
+    if (!MOUSE_TOGGLE) {
+      target.x += 0.005;
+    }
 
     rotation.x += (target.x - rotation.x) * 0.1;
     rotation.y += (target.y - rotation.y) * 0.1;
@@ -372,8 +355,6 @@ DAT.Globe = function(container, opts) {
   this.createPoints = createPoints;
   this.renderer = renderer;
   this.scene = scene;
-  // this.addPoint = addPoint;
 
   return this;
-
 };
