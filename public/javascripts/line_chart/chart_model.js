@@ -7,17 +7,20 @@ function ChartModel(){
   this.series2 = []
   this.series3 = []
   this.series4 = []
+  this.series5 = []
   this.chartObject = {
     data: [
-      {markerType: "none", type: "line", dataPoints: this.series0, visible: true},
-      {markerType: "none", type: "line", dataPoints: this.series1, visible: true},
-      {markerType: "none", type: "line", dataPoints: this.series2, visible: true},
-      {markerType: "none", type: "line", dataPoints: this.series3, visible: true},
-      {markerType: "none", type: "line", dataPoints: this.series4, visible: true},
+      {markerType: "none", type: "line", dataPoints: this.series0, visible: true, color: "#4099FF", lineThickness: 4},
+      {markerType: "none", type: "line", dataPoints: this.series1, visible: false, color: "#87DBFA", lineThickness: 4},
+      {markerType: "none", type: "line", dataPoints: this.series2, visible: false, color: "#BCDBFD", lineThickness: 4},
+      {markerType: "none", type: "line", dataPoints: this.series3, visible: false, color: "#4F7EB3", lineThickness: 4},
+      {markerType: "none", type: "line", dataPoints: this.series4, visible: false, color: "#87CACF", lineThickness: 4},
+      {markerType: "none", type: "line", dataPoints: this.series5, visible: false, color: "#66FFFF", lineThickness: 4}
     ],
-    axisY: {minimum: 0, maximum: 10000, interval: 100 },
-    axisX: {minimum: 0, interval: 1 },
-    toolTip: {content: "#{name}<br>Number of Tweets: {y}"}
+    axisY: {minimum: 0, maximum: 10000, interval: 100, lineThickness: 0, labelFontColor: "white", tickThickness: 0, gridThickness: 0 },
+    axisX: {minimum: 0, interval: 1, lineThickness: 0, labelFontColor: "white", tickThickness: 0 },
+    toolTip: {content: "#{name}<br>Number of Tweets: {y}"},
+    backgroundColor: "black"
   }
 }
 
@@ -53,7 +56,7 @@ ChartModel.prototype = {
 
   calculateYAxisValues: function(defaults){
     var visibleAxes = this.countVisibleAxes();
-    if(visibleAxes === 5){
+    if(visibleAxes === 6){
       this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-1000)
       this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+1000
     }else if(visibleAxes > 1){

@@ -1,30 +1,36 @@
 extends layout
 
 block content
-  h1 Top 5 Hashtags Over the Last 24 Hours
-  #checkbox-list
-    label
-      input(type='checkbox', name='box0', id = 'box0', checked='checked')
-      span(id='label0')
-    label
-      input(type='checkbox', name='box1', id = 'box1', checked='checked')
-      span(id='label1')
-    label
-      input(type='checkbox', name='box2', id = 'box2', checked='checked')
-      span(id='label2')
-    label
-      input(type='checkbox', name='box3', id = 'box3', checked='checked')
-      span(id='label3')
-    label
-      input(type='checkbox', name='box4', id = 'box4', checked='checked')
-      span(id='label4')
-    label
-      input(type='checkbox', name='box5', id = 'box5', checked='checked')
-      span(id='label5')
+  a(href="/")
+    .globe-button
+      img(src="http://png-4.findicons.com/files/icons/984/misto/128/globe_disconnected.png")
+  h1(class='graph-title') Top Hashtags
   #chartContainer
+  #checkbox-list
+    #top-three
+      .hashtag-label.label0
+        span 1.
+        span(id='label0')
+      .hashtag-label.label1.faded
+        span 2.
+        span(id='label1')
+      .hashtag-label.label2.faded
+        span 3.
+        span(id='label2')
+    #bottom-three
+      .hashtag-label.label3.faded
+        span 4.
+        span(id='label3')
+      .hashtag-label.label4.faded
+        span 5.
+        span(id='label4')
+      .hashtag-label.label5.faded
+        span 6.
+        span(id='label5')
+  link(rel="stylesheet" href="/stylesheets/graph-styles.css")
   script(src="/socket.io/socket.io.js")
-  script(src="/javascripts/line-chart/chart_view.js")
-  script(src="/javascripts/line-chart/checkbox_view.js")
-  script(src="/javascripts/line-chart/chart_model.js")
-  script(src="/javascripts/line-chart/chart_controller.js")
+  script(src="/javascripts/line_chart/chart_view.js")
+  script(src="/javascripts/line_chart/checkbox_view.js")
+  script(src="/javascripts/line_chart/chart_model.js")
+  script(src="/javascripts/line_chart/chart_controller.js")
   script(src='/javascripts/canvasjs.min.js')

@@ -6,23 +6,45 @@
     <link rel="stylesheet" href="/stylesheets/globe-styles.css">
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+      <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1486696068242828',
+          xfbml      : true,
+          version    : 'v2.0'
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
   </head>
-  <body>
-
-  <div id="container"></div>
-
-  <div class="tweetCountDescription animated">
-  The amount of tweets streamed in the last 0 seconds
-  </div>
-
-  <a href="#">
-    <div class="tweetCountContainer animated zoomInLeft">
-      <div class="tweetCount"></div>
-      <div class="tweetCountText">
-      TWEETS
-      </div>
+  <body>  
+    <div id="fb-like">
+    <div id="fb-root"></div>
+    <div class="fb-like" data-href="http://54.193.83.21/" data-layout="button" data-action="like" data-show-faces="false" data-share="true">FACEBOOK</div>
     </div>
-  </a>
+    <div id="tweet-us">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-lang="en"></a>
+    </div>
+    <div id="container"></div>
+
+    <div class="tweetCountDescription animated"> </div>
+
+    <a href="#">
+      <div class="tweetCountContainer animated zoomInLeft">
+        <div class="tweetCount"></div>
+        <div class="tweetCountText">
+        TWEETS
+        </div>
+      </div>
+    </a>
 
   <a href="/hashtag">
     <div class="hashtagCountContainer animated zoomInRight">
@@ -34,7 +56,8 @@
   </a>
 
   <div class="hashtagCountDescription animated">
-  Click for TOP FIVE HASHTAGS
+  Click for <br>
+  TOP HASHTAGS
   </div>
 
   <div id="watching" class="animated flipInX">
@@ -42,10 +65,13 @@
     <div id="explanation" class="animated">You are watching a live stream of 1% of all tweets, plotted by location, in real time.</div>
   </div>
 
-  <div id="info" class="animated zoomInRight">
-    <div id="github-link">
+  <div id="fork-github" class="animated">
+  Fork our Github Repo!
+  </div>
+  <div id="github-link">
       <a href="https://github.com/rjbernaldo/live-analytics"><img src="http://www.iconsdb.com/icons/download/silver/github-10-512.png"></a>
-    </div>
+  </div>
+  <div id="info" class="animated zoomInRight">
     Created by <a href="http://github.com/rjbernaldo">Rj</a>, <a href="http://github.com/shcallaway">Sherwood</a>, <a href="http://github.com/amolborcar">Amol</a>, & <a href="http://github.com/mameneses">Matias</a> &bull; Realtime data acquired from the <a href="http://dev.twitter.com/">Twitter Streaming API</a>
   </div>
 
