@@ -32,6 +32,7 @@ Database.prototype = {
     }
     this.removeDeprecated();
   },
+
   recount: function(hashtag) {
     function map() {emit(this.hashtag, 1)}
     function reduce(key, values) {return Array.sum(values)}
@@ -40,6 +41,7 @@ Database.prototype = {
       out: {merge: "counts"}
     });
   },
+
   topFiveHashtags: function(controller) {
     var cursor = db.collection('counts').find({}).sort({value: -1}).limit(5);
     cursor.toArray(function(error, topFive) {

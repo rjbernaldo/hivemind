@@ -11,4 +11,8 @@ router.get('/hashtag', function(request, response) {
   response.render('canvas');
 })
 
+router.get('/hashtag-new', function(request, response) {
+  response.render('hashtag');
+})
+
 module.exports = router;
