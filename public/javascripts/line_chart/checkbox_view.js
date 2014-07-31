@@ -18,14 +18,8 @@ CheckBoxView.prototype = {
     }
   },
   makeCheckBoxesToggleable: function(){
-    // $('.hashtag-label').on('click', function(event){
-    //   $(event.target).css('color', '#aaa')
-    //   $($(event.target).parent()).css('color', '#aaa')
-    // })
     $('.hashtag-label').on('click', function(event){
-      // debugger
       $(this).toggleClass("faded");
-      // $(this).
     })
   }
 }
