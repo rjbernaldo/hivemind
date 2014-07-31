@@ -1,16 +1,17 @@
 window.onload = function(){
-  socket = io.connect('/')
+  var socket = io.connect('/')
   var chartView = new ChartView;
   var checkBoxView = new CheckBoxView;
   var chartModel = new ChartModel;
-  var chartController = new ChartController(chartView, checkBoxView, chartModel);
+  var chartController = new ChartController(chartView, checkBoxView, chartModel, socket);
   chartController.init(socket);
 }
 
-function ChartController(chartView, checkBoxView, chartModel){
+function ChartController(chartView, checkBoxView, chartModel, socket){
   this.chartView = chartView;
   this.checkBoxView = checkBoxView;
   this.chartModel = chartModel;
+  this.socket = socket;
   this.updateInterval = 20;
   this.cleanInterval = 5000;
 }
@@ -19,8 +20,9 @@ ChartController.prototype = {
   init: function(socket){
     this.bindEventListeners(socket);
     var updateInterval = this.updateInterval
-    var chart = this.chartModel.chartObject
-    this.checkBoxView.makeCheckBoxesClickable(chart);
+    var chartObj = this.chartModel.chartObject
+    this.checkBoxView.makeCheckBoxesClickable(chartObj);
+    var chart = new CanvasJS.Chart("chartContainer", chartObj)
 
 
     // set interval to clear old data
@@ -35,16 +37,17 @@ ChartController.prototype = {
       this.chartModel.updateYAxis();
       this.chartModel.updateXAxis();
       var chartObject = this.chartModel.chartObject
-      this.chartView.renderChart(chartObject)
+      this.chartView.renderChart(chart)
     }.bind(this), updateInterval)
+
   },
 
   bindEventListeners: function(socket){
-    socket.on('new count', function(data){
-      console.log(data)
+    this.socket.on('new count', function(data){
       this.chartModel.streamToHolder(data)
       this.checkBoxView.populateCheckBoxes(data)
-    }.bind(this));
+    }.bind(this))
   }
+
 }
 

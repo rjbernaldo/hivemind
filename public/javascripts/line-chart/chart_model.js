@@ -7,7 +7,6 @@ function ChartModel(){
   this.series2 = []
   this.series3 = []
   this.series4 = []
-  this.series5 = []
   this.chartObject = {
     data: [
       {markerType: "none", type: "line", dataPoints: this.series0, visible: true},
@@ -15,7 +14,6 @@ function ChartModel(){
       {markerType: "none", type: "line", dataPoints: this.series2, visible: true},
       {markerType: "none", type: "line", dataPoints: this.series3, visible: true},
       {markerType: "none", type: "line", dataPoints: this.series4, visible: true},
-      {markerType: "none", type: "line", dataPoints: this.series5, visible: true},
     ],
     axisY: {minimum: 0, maximum: 10000, interval: 100 },
     axisX: {minimum: 0, interval: 1 },
@@ -55,7 +53,7 @@ ChartModel.prototype = {
 
   calculateYAxisValues: function(defaults){
     var visibleAxes = this.countVisibleAxes();
-    if(visibleAxes === 6){
+    if(visibleAxes === 5){
       this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-1000)
       this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+1000
     }else if(visibleAxes > 1){
