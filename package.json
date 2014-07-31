@@ -13,7 +13,6 @@
     "twitter": "*",
     "mongojs": "*",
     "dotenv": "0.4.0",
-    "newrelic": "*",
     "request": "*",
     "forever": "*"
   }

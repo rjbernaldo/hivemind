@@ -22,6 +22,7 @@ ChartController.prototype = {
     var chart = this.chartModel.chartObject
     this.checkBoxView.makeCheckBoxesClickable(chart);
 
+
     // set interval to clear old data
     setInterval(function(){
       this.chartModel.cleanHolder();
@@ -39,8 +40,8 @@ ChartController.prototype = {
   },
 
   bindEventListeners: function(socket){
-    var chart = this.chartModel.chartObject
     socket.on('new count', function(data){
+      console.log(data)
       this.chartModel.streamToHolder(data)
       this.checkBoxView.populateCheckBoxes(data)
     }.bind(this));
