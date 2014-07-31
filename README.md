@@ -1,7 +1,3 @@
-# #HiveMind
-
-Live website hosted over at Amazon Web Services:
-
 ## Introduction
 
 Analyze a live stream of incoming data via the Twitter streaming API using Node, Express, Sockets & Mongo.
