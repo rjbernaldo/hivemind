@@ -99,14 +99,13 @@ ChartModel.prototype = {
   },
 
   cleanSeries: function(){
-    for(var i = 1; i < this.holder[0].length; i++){
-      (function(i){
-        if (eval("this.series"+i).length > 500){
-          for(var j = 0; j < 20; j++){
-            eval("this.series"+i).shift();
-          }
+    for(var i = 0; i < this.holder[0].length; i++){
+      if (eval("this.series"+i).length > 500){
+        debugger
+        for(var j = 0; j < 200; j++){
+          eval("this.series"+i).shift();
         }
-      }.bind(this))(i)
+      }
     }
   }
 }
