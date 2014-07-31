@@ -12,6 +12,14 @@ body {
   height: 100%;
 }
 
+#fb-like {
+  z-index:1;
+}
+
+#tweet-us {
+  z-index:1;
+}
+
 .tweetCount {
   font-family: 'Georgia';
   font-size: 40px;
