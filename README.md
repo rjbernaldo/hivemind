@@ -1,3 +1,5 @@
+# #HiveMind
+
 ## Introduction
 
 Analyze a live stream of incoming data via the Twitter streaming API using Node, Express, Sockets & Mongo.
@@ -36,7 +38,7 @@ use mydb # this sets up a new database named mydb
 
 Run the following commands from the Terminal.
 ```
-cd live-analytics
+cd hivemind
 npm install dotenv
 touch .env
 ```
