@@ -46,7 +46,7 @@ UI.View = (function() {
   // var countryCountDom = document.getElementsByClassName('something');
 
   function animateDescription() {
-    $('#watching').toggle(
+    $('#watching').hover(
       function(){
         $('#what').addClass('flipOutX')
         $('#what').css('display','none')
@@ -58,6 +58,7 @@ UI.View = (function() {
         $('#explanation').removeClass('flipInX')
         $('#explanation').addClass('flipOutX')
         setTimeout(function(){
+          $('#explanation').css('display','none')
           $('#what').css('display','block')
           $('#what').removeClass('flipOutX')
           $('#what').addClass('flipInX')
