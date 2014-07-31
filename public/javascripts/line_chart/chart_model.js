@@ -18,7 +18,7 @@ function ChartModel(){
       {markerType: "none", type: "line", dataPoints: this.series5, visible: false, color: "#66FFFF", lineThickness: 4}
     ],
     axisY: {minimum: 0, maximum: 10000, interval: 100, lineThickness: 0, labelFontColor: "white", tickThickness: 0, gridThickness: 0 },
-    axisX: {minimum: 0, interval: 1, lineThickness: 0, labelFontColor: "white", tickThickness: 0 },
+    axisX: {minimum: 0, interval: 1, lineThickness: 0, labelFontColor: "black", tickThickness: 2, tickLength: 3, tickColor: 'white' },
     toolTip: {content: "#{name}<br>Number of Tweets: {y}"},
     backgroundColor: "black"
   }
