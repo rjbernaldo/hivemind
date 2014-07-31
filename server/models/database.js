@@ -43,7 +43,7 @@ Database.prototype = {
   },
 
   topFiveHashtags: function(controller) {
-    var cursor = db.collection('counts').find({}).sort({value: -1}).limit(5);
+    var cursor = db.collection('counts').find({}).sort({value: -1}).limit(6);
     cursor.toArray(function(error, topFive) {
       controller.line_graph_view.update(topFive);
     });

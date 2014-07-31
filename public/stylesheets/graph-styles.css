@@ -1,0 +1,63 @@
+#checkbox-list{
+  margin-top: 450px;
+  width: 100%;
+}
+
+#top-three{
+  width: 45%;
+  display: inline-block;
+}
+
+#bottom-three{
+  width: 45%;
+  display: inline-block;
+}
+
+
+.hashtag-label {
+  font-size: 23px;
+  font-family: sans-serif;
+  color: green;
+}
+
+.hashtag-label:hover {
+  font-size: 25px;
+}
+
+.graph-title {
+  color: green;
+  text-align: center;
+}
+
+body {
+  background-color: black;
+}
+
+#label0, .number0 {
+  color: #4099FF;
+}
+
+#label1, .number1 {
+  color: #87DBFA;
+}
+
+#label2, .number2 {
+  color: #BCDBFD;
+}
+
+#label3, .number3 {
+  color: #4F7EB3;
+}
+
+#label4, .number4 {
+  color: #87CACF;
+}
+
+#label5, .number5 {
+  color: #66FFFF;
+}
+
+.faded {
+  color: #aaa;
+}
+

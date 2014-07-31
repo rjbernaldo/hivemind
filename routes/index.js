@@ -8,10 +8,6 @@ router.get('/', function(request, response) {
 });
 
 router.get('/hashtag', function(request, response) {
-  response.render('canvas');
-})
-
-router.get('/hashtag-new', function(request, response) {
   response.render('hashtag');
 })
 
