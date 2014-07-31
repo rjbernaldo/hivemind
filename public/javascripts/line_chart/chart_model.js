@@ -56,15 +56,15 @@ ChartModel.prototype = {
 
   calculateYAxisValues: function(defaults){
     var visibleAxes = this.countVisibleAxes();
-    if(visibleAxes === 6){
+    if(visibleAxes >= 4){
       this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-1000)
       this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+1000
-    }else if(visibleAxes > 1){
-      this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-100)
-      this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+100
+    }else if(visibleAxes >= 2 && visibleAxes <= 3){
+      this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-300)
+      this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+300
     }else{
-      this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-10)
-      this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+10
+      this.chartObject.axisY.minimum = Math.max(0, Math.min.apply(Math, defaults)-50)
+      this.chartObject.axisY.maximum = Math.max.apply(Math, defaults)+50
     }
     this.chartObject.axisY.interval = parseInt((this.chartObject.axisY.maximum-this.chartObject.axisY.minimum)/4)
   },
