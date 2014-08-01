@@ -1,6 +1,6 @@
 exports.config = {
 	app_name: ['#HiveMind'],
-	license_key : process.env.NEWRELIC_LICENSE_KEY,
+	license_key : process.env.NEW_RELIC_LICENSE_KEY,
 	logging: {
 		level:'info'
 	}

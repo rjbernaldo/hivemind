@@ -15,6 +15,7 @@
     "mongojs": "*",
     "request": "*",
     "socket.io": "*",
-    "twitter": "*"
+    "twitter": "*",
+    "newrelic": "*"
   }
 }
