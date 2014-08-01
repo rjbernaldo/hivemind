@@ -3,6 +3,7 @@ var dotenv = require('dotenv'),
     path = require('path'),
     routes = require('./routes/index'),
     app = express();
+    newrelic = require('newrelic')
 
 // load environment
 dotenv.load();
