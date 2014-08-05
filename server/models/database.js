@@ -17,6 +17,7 @@ Database.prototype = {
   garbageCollection: function() {
     setInterval(function() {
       db.collection('counts').remove({value: 1});
+      db.repairDatabase();
     }, MS_HOUR);
   },
   removeDeprecated: function() {
