@@ -1,5 +1,5 @@
 # #HiveMind
-Live website hosted over at Heroku: hivemind-dbc.herokuapp.com
+Live website hosted over at Heroku: [hivemind-dbc.herokuapp.com](hivemind-dbc.herokuapp.com)
 
 ## Introduction
 
