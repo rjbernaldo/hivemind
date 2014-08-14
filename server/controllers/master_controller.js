@@ -20,11 +20,11 @@ function MasterController(io) {
 }
 MasterController.prototype = {
   stream: function() {
-    this.setupDatabase();
+    //this.setupDatabase();
     this.API.stream('filter', {'locations': '-180,-90,180,90'}, function(stream) {
       stream.on('data', function(data) {
-        this.database.store(data);
-        this.line_graph_controller.topFiveHashtags(this.database);
+        //this.database.store(data);
+        //this.line_graph_controller.topFiveHashtags(this.database);
         this.globe_controller.chartCoordinates(data);
         this.globe_controller.sendHashtagTotal(data);
       }.bind(this));
